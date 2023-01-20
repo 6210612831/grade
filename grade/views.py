@@ -73,9 +73,18 @@ def manage_grade_view(request):
         # Upload Excel file and create db to store data
         if request.method == 'POST':
             try:
+                # Read exel file to json
                 df = pd.read_excel(request.FILES['file'])
                 data = df.to_json(orient='records')
                 student_list = json.loads(data)
+                # Check if subject is exist
+                for student in student_list:
+                    temp = Grade.objects.filter(subject=student['subject'])
+                    if len(temp) > 0 :
+                        output = get_grade_data(0,request)
+                        return render(request, "grade/manage_grade.html",{'output':output,'message':'subject has already exist'})
+                    break
+                # Upload exel to db
                 table_key = ['std_id','name','subject','grade','midterm','final']
                 for student in student_list:
                     student_data = {}
@@ -123,7 +132,6 @@ def delete_table_view(request,subject):
 def grade_view(request):
     try:
         request.session['user_id']
-        # Upload Excel file and create db to store data
         # subject = 'cn203'
         output = get_grade_data(1,request)
         return render(request, "grade/grade.html",{'output':output})
