@@ -1,0 +1,25 @@
+{% load my_tags %}
+
+{{request.session.user_id}}
+Grade
+
+<hr>
+
+{% for table in output%}
+  <table>
+    <tr>
+      {% for header in table.header_list %}
+      <th>{{ header }}</th>
+      {% endfor %}
+    </tr>
+    {% for grade in table.grade_list %}
+    <tr>
+      {% for header in table.header_list %}
+      <td>{{ grade|load_grade:header }}</td>
+      {% endfor %}
+      
+    </tr>
+    {% endfor %}
+  </table>
+<hr>
+{% endfor %}

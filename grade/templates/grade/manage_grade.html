@@ -1,0 +1,38 @@
+{% load my_tags %}
+
+<script language="javascript">
+function confirm_delete()
+    {
+        var answer = window.confirm("ยืนยันการลบ");
+        return answer;
+    }
+</script>
+
+
+
+<form method="post" action="{% url 'grade:manage_grade' %}" enctype="multipart/form-data">
+  {% csrf_token %}
+    <input type="file" id="file" name="file"/>
+    <input type="submit" value="Upload" />
+  </form>
+
+
+{% for table in output%}
+  <table>
+    <tr>
+      {% for header in table.header_list %}
+      <th>{{ header }}</th>
+      {% endfor %}
+    </tr>
+    {% for grade in table.grade_list %}
+    <tr>
+      {% for header in table.header_list %}
+      <td>{{ grade|load_grade:header }}</td>
+      {% endfor %}
+      
+    </tr>
+    {% endfor %}
+  </table>
+  <a href="{% url 'grade:delete_table' table.grade_list.0|load_grade:'subject' %}" onclick="return confirm_delete()">Delete</a>
+
+{% endfor %}
