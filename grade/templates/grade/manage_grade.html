@@ -90,8 +90,8 @@ alert('{{message}}');
           <input type="text" id="sname" placeholder="" name="sname" class="form-control" style="width: 250px;">
           </div>
           <div class="col-md-auto">
-            <label for="major">ภาควิชา</label>
-            <input type="text" id="major" placeholder="" name="major" class="form-control" style="width: 250px;">
+            <label for="section">SECTION</label>
+            <input type="text" id="section" placeholder="" name="sname" class="form-control" style="width: 250px;">
           </div>
         </div>
         <br>
@@ -101,12 +101,36 @@ alert('{{message}}');
             <input type="text" id="year" placeholder="" name="year" class="form-control" style="width: 250px;">
           </div>
           <div class="col-md-auto">
-            <label for="semestre">ภาคเรียน</label>
-            <input type="text" id="semestre" placeholder="" name="semestre" class="form-control" style="width: 250px;">
+            <label for="semestre">ภาคการศึกษา</label>
+            <select id="semestre" class="form-select" aria-label="Default select" style="width: 250px;">
+              <option selected="">โปรดเลือกภาคการศึกษา</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </div>
+        </div>
+        <br>
+        <div class="row thai-font" style="margin-left: 2em; font-size: 16px;">
+          <div class="col-md-auto">
+            <label for="department">ภาควิชา</label>
+            <select id="department" class="form-select" aria-label="Default select" style="width: 250px;">
+              <option selected="">โปรดเลือกภาควิชา</option>
+              <option value="1">วิศวกรรมไฟฟ้าและคอมพิวเตอร์</option>
+              <option value="2">วิศวกรรมอุตสาหการ</option>
+              <option value="3">วิศวกรรมเครื่องกล</option>
+              <option value="4">วิศวกรรมโยธา</option>
+              <option value="5">วิศวกรรมเคมี</option>
+            </select>
           </div>
           <div class="col-md-auto">
-            <label for="section">SECTION</label>
-            <input type="text" id="section" placeholder="" name="sname" class="form-control" style="width: 250px;">
+            <label for="course">โครงการ / หลักสูตร</label>
+            <select id= "course" class="form-select" aria-label="Default select" style="width: 250px;">
+              <option selected="">โปรดเลือกโครงการ / หลักสูตร</option>
+              <option value="1">TEP/TEPE</option>
+              <option value="2">TU-PINE</option>
+              <option value="3">บัณฑิตศึกษา</option>
+              <option value="4">วิศวกรรมทางการแพทย์</option>
+            </select>
           </div>
         </div>
         <br>
@@ -150,5 +174,10 @@ alert('{{message}}');
   {% endfor %}
   <hr class="w3-col m11">
   </div>
+  <script>
+    var date = new Date().getFullYear()
+    date += 542
+    document.getElementById("year").value = date;
+  </script>
 {% endblock %}
 
