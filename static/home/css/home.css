@@ -73,6 +73,14 @@ a {
     background-color: #AFD8F2;
 }
 
+.baby-blue3 {
+    background-color: #daeefa;
+}
+
+.baby-blue3-h:hover {
+    background-color: #c7e1f1;
+}
+
 .baby-blue2 {
     background-color: #afd8f27a;
 }
@@ -214,7 +222,7 @@ a {
 
 .scroller {
     width: auto;
-    max-width: 770px;
+    max-width: 100%;
     height: 310px;
     overflow-y: scroll;
     scrollbar-width: thin;
@@ -330,7 +338,7 @@ a {
 
 .btn-save:hover {
     background-color: #385e96ad;
-    color: black;
+    color: white;
     width: 150px;
     height: 35px;
     transition-duration: 0.4s;
