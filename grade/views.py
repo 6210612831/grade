@@ -143,3 +143,7 @@ def grade_view(request):
         return render(request, "grade/grade.html", {'output': output})
     except:
         return HttpResponseRedirect(reverse("grade:login"))
+
+
+def courese_list(request):
+    return render(request, "grade/courese_list.html")
