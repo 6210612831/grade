@@ -171,13 +171,19 @@ alert('{{message}}');
       </tr>
       {% endfor %}
       <br>
+    </table>
   {% endfor %}
   <hr class="w3-col m11">
   </div>
   <script>
-    var date = new Date().getFullYear()
-    date += 542
-    document.getElementById("year").value = date;
+    var date = new Date()
+    var year_century = date.getFullYear()
+    var year = year_century + 543
+    var mounth = date.getMonth() + 1
+    if(mounth >=1 && mounth < 8){
+      year -= 1;
+    }
+    document.getElementById("year").value = year;
   </script>
 {% endblock %}
 
