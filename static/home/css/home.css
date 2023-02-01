@@ -57,6 +57,9 @@ a {
     height: 50px;
     color: white;
 }
+.bg-st{
+    background-color: #019992;
+}
 
 .navy-blue {
     background-color: #385e96ad;

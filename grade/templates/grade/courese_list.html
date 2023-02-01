@@ -1,0 +1,56 @@
+{% extends "grade/layout.html" %}
+{% load my_tags %}
+
+{% block body %}
+<style>
+</style>
+
+<div class="w3-col m9">
+    <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
+        <div class="w3-container light-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
+           <br>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2 thai-font" style="font-size: 16px;">
+                        1. รหัสวิชา:<br>
+                        &ensp;&ensp;ชื่อวิชา:<br>
+                        &ensp;&ensp;SECTION:<br>
+                        &ensp;&ensp;ปีการศึกษา:<br>
+                    </div>
+                    <div class="col thai-font" style="font-size: 16px;">
+                        CN101<br>
+                        วิศวกรรมทางการแพทย์<br>
+                        000000<br>
+                        2565<br>
+                    </div>
+                </div>
+            </div>
+            <div class="container" style="margin-top: 1em;">
+                <div class="row">
+                    <div class="col-md-2 thai-font" style="margin-top: 1.5em; margin-left: 1em;">
+                        สถานะ: 
+                        <!-- <span style="margin-left: 1em; " class="font-red">
+                            ไม่แสดง
+                        </span> -->
+                        <span style="margin-left: 1em; " class="font-green">
+                            แสดง
+                        </span>
+                    </div>
+                    <div class="col-md-2 thai-font" style="margin-top: 1em;">
+                        <button class="btn-save ">
+                            รายละเอียด
+                        </button>
+                    </div>
+                    <div class="col thai-font">
+                        <button class="btn-dagr">
+                            ลบ
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
