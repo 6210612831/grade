@@ -44,6 +44,24 @@ class Grade(models.Model):
         return f"Name : {self.name} Subject : {self.subject} Grade : {self.grade} Midterm : {self.midterm} Final : {self.final} Customfield : {self.customfield}"
 
 
+# Model for grade table
+class GradeTable(models.Model):
+    subject_id =  models.CharField( max_length=15,blank=False, null=False)
+    subject_name = models.CharField(max_length=100 ,blank=False, null=False)
+    section = models.CharField(max_length=100 ,blank=False, null=False)
+    year = models.CharField(max_length=4,blank=False, null=False)
+    semestre = models.CharField(max_length=1,blank=False, null=False)
+    department = models.CharField(max_length=100,blank=False, null=False)
+    course = models.CharField(max_length=100,blank=False, null=False)
+    desc = models.CharField(max_length=255,blank=False, null=False)
+    user = models.CharField(max_length=255,blank=False, null=False)
+    grade_table = models.CharField(max_length=255,blank=False, null=False)
+
+    def __str__(self):
+        return f"Name : {self.subject_name} Section : {self.section} Year : {self.year} Semestre : {self.semestre} Course : {self.course}"
+
+
+
 # Model for map subject and instructor who create
 class SubjectInstructor(models.Model):
     subject = models.CharField(max_length=100 ,blank=False, null=False)

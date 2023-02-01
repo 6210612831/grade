@@ -91,7 +91,7 @@ alert('{{message}}');
           </div>
           <div class="col-md-auto">
             <label for="section">SECTION</label>
-            <input type="text" id="section" placeholder="" name="sname" class="form-control" style="width: 250px;">
+            <input type="text" id="section" placeholder="" name="section" class="form-control" style="width: 250px;">
           </div>
         </div>
         <br>
@@ -102,7 +102,7 @@ alert('{{message}}');
           </div>
           <div class="col-md-auto">
             <label for="semestre">ภาคการศึกษา</label>
-            <select id="semestre" class="form-select" aria-label="Default select" style="width: 250px;">
+            <select id="semestre" class="form-select" aria-label="Default select" style="width: 250px;" name="semestre">
               <option selected="">โปรดเลือกภาคการศึกษา</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -113,7 +113,7 @@ alert('{{message}}');
         <div class="row thai-font" style="margin-left: 2em; font-size: 16px;">
           <div class="col-md-auto">
             <label for="department">ภาควิชา</label>
-            <select id="department" class="form-select" aria-label="Default select" style="width: 250px;">
+            <select id="department" class="form-select" aria-label="Default select" style="width: 250px;" name="department">
               <option selected="">โปรดเลือกภาควิชา</option>
               <option value="1">วิศวกรรมไฟฟ้าและคอมพิวเตอร์</option>
               <option value="2">วิศวกรรมอุตสาหการ</option>
@@ -124,7 +124,7 @@ alert('{{message}}');
           </div>
           <div class="col-md-auto">
             <label for="course">โครงการ / หลักสูตร</label>
-            <select id= "course" class="form-select" aria-label="Default select" style="width: 250px;">
+            <select id= "course" class="form-select" aria-label="Default select" style="width: 250px;" name="course">
               <option selected="">โปรดเลือกโครงการ / หลักสูตร</option>
               <option value="1">TEP/TEPE</option>
               <option value="2">TU-PINE</option>
@@ -153,21 +153,24 @@ alert('{{message}}');
   </div>
     
   <hr class="w3-col m11">
+
   {% for table in output%}
+    <br>
+    Table_Name : {{table.table_name}} 
+    <br>
+    <a href="{% url 'grade:delete_table' table.grade_table_id %}" onclick="return confirm_delete()">Delete</a>
     <table>
       <tr>
         {% for header in table.header_list %}
         <th>{{ header }}</th>
         {% endfor %}
-        <th>ลบ</th>
+
       </tr>
       {% for grade in table.grade_list %}
       <tr>
-        {% for header in table.header_list %}
-        <td>{{ grade|load_grade:header }}</td>
+        {% for data in grade %}
+          <td>{{ data }}</td>
         {% endfor %}
-        <td><a href="{% url 'grade:delete_table' table.grade_list.0|load_grade:'subject' %}"
-            onclick="return confirm_delete()">Delete</a></td>
       </tr>
       {% endfor %}
       <br>

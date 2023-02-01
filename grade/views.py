@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import json
 import pandas as pd
-from .models import CustomGradeField, Grade
+from .models import CustomGradeField, Grade, GradeTable
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import requests
@@ -11,15 +11,23 @@ from rest_framework import status
 #     with open('path/to/save/file', 'wb+') as destination:
 #         for chunk in f.chunks():
 #             destination.write(chunk)
+from django.conf import settings
+from django.db import connection
 
 
-HOST = "http://127.0.0.1:8000"
+
+
+HOST = "https://restapi.engr.tu.ac.th"
 
 # Create your views here.
 
 
 def index(request):
-    return render(request, "grade/layout.html")
+    try:
+        if request.session['user_id']:
+            return render(request, "grade/grade.html")
+    except:
+        return render(request, "grade/login.html")
 
 
 # Login page
@@ -52,21 +60,25 @@ def login_view(request):
 
 # Load grade data
 def get_grade_data(choice, request):
-    subject_list = Grade.objects.values_list('subject', flat=True).distinct()
     output = []
-    for subject in subject_list:
-        if choice == 0:
-            grade_list = Grade.objects.filter(subject=subject)
-        else:
-            grade_list = Grade.objects.filter(
-                subject=subject, std_id=request.session['user_id'])
-        header_list = ['std_id', 'name',
-                       'subject', 'grade', 'midterm', 'final']
-        for grade in grade_list:
-            for custom_field in grade.customfield.all():
-                header_list.append(custom_field.name)
-            break
-        output.append({'grade_list': grade_list, 'header_list': header_list})
+    grade_table_list = GradeTable.objects.filter(user=request.session['user_id'])
+    for grade_table in grade_table_list:
+        header_list = []
+        table_name = grade_table.subject_id+'_'+grade_table.section+'_'+grade_table.year+'_'+grade_table.semestre+'_'+grade_table.course+'_'+request.session['user_id']
+        # get cloumn name
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_NAME`=\'"+table_name+"\';")
+            products = cursor.fetchall()
+            # Column name to list
+            for column_name in products:
+                header_list.append(column_name[0])
+            # print(header_list)
+        print('header done')
+        with connection.cursor() as cursor:
+            cursor.execute(f"SELECT * FROM {table_name};")
+            products = cursor.fetchall()
+            print(products)
+            output.append({'grade_list': products, 'header_list': header_list, 'table_name': table_name,'grade_table_id':grade_table.id})
     return output
 
 
@@ -78,60 +90,79 @@ def manage_grade_view(request):
         if request.method == 'POST':
             try:
                 # Read exel file to json
+                subject_id = request.POST["sid"] #รหัสวิชา
+                subject_name = request.POST["sname"] #ชื่อวิชา
+                section = request.POST["section"] #SECTION
+                year = request.POST["year"] #ปีการศึกษา
+                semestre = request.POST["semestre"] #ภาคการศึกษา
+                department = request.POST["department"] #ภาควิชา
+                course = request.POST["course"] #โครงการ / หลักสูตร
+                desc = request.POST["desc"] #หมายเหตุ
                 df = pd.read_excel(request.FILES['file'])
                 data = df.to_json(orient='records')
                 student_list = json.loads(data)
-                # Check if subject is exist
+
+                # Set table name
+                grade_table = subject_id+'_'+section+'_'+year+'_'+semestre+'_'+course+'_'+request.session['user_id']
+                if len(GradeTable.objects.filter(grade_table=grade_table)) != 0 :
+                    return render(request, "grade/manage_grade.html", {'message': 'Table is already exist,Please delete old table'})
+                # Create GradeTable Object that store table's data
+                grade = GradeTable.objects.create(subject_id=subject_id,subject_name=subject_name,section=section,year=year,semestre=semestre,department=department,course=course,desc=desc,grade_table=grade_table,user=request.session['user_id'])
+                # Get header for create table field
+                create_table_sql = f"CREATE TABLE {grade_table} ("
+                header = []
+                for key in student_list[0]:
+                    if create_table_sql[-1] != "(":
+                        create_table_sql += ","
+                    create_table_sql += f"{key} varchar(255)"
+                    header.append(key)
+                # Create table
+                create_table_sql += ');'
+                try:
+                    with connection.cursor() as cursor:
+                        cursor.execute(create_table_sql)
+                except:
+                    return render(request, "grade/manage_grade.html", {'message': 'table is already exist,Please delete old table'})
+
+                # Upload exel to table
                 for student in student_list:
-                    temp = Grade.objects.filter(subject=student['subject'])
-                    if len(temp) > 0:
-                        output = get_grade_data(0, request)
-                        return render(request, "grade/manage_grade.html", {'output': output, 'message': 'subject has already exist'})
-                    break
-                # Upload exel to db
-                table_key = ['std_id', 'name', 'subject',
-                             'grade', 'midterm', 'final']
-                for student in student_list:
-                    student_data = {}
-                    custom_obj_list = []
-                    for key in student:
-                        if key in table_key:
-                            student_data[key] = student[key]
-                        else:
-                            custom_obj = CustomGradeField.objects.create(
-                                name=key, value=student[key])
-                            custom_obj_list.append(custom_obj)
-                    grade_obj = Grade.objects.create(std_id=student['std_id'], name=student['name'], subject=student['subject'],
-                                                     grade=student['grade'], midterm=student['midterm'], final=student['final'])
-                    for custom_field in custom_obj_list:
-                        grade_obj.customfield.add(custom_field)
-                        grade_obj.save()
+                    # Get header for create table field
+                    insert_data_sql = f"INSERT INTO {grade_table} VALUES ("
+                    for key in header:
+                        if insert_data_sql[-1] != "(":
+                            insert_data_sql += ","
+                        insert_data_sql += "\'"+str(student[key])+"\'"
+                    insert_data_sql += ');'
+                    # Insert each row of student data
+                    with connection.cursor() as cursor:
+                        cursor.execute(insert_data_sql)
+                return render(request, "grade/manage_grade.html", {'message': 'upload success'})
+            # If upload file error
+            except Exception as e:
                 output = get_grade_data(0, request)
-                return render(request, "grade/manage_grade.html", {'output': output, 'message': 'upload success'})
-            except:
-                # If upload file error
-                output = get_grade_data(0, request)
-                return render(request, "grade/manage_grade.html", {'output': output, 'message': 'exel file error'})
+                return render(request, "grade/manage_grade.html", {'output': output, 'message': f'Exel File Error : {e}'})
         # Load data to manage_grade page
         else:
             output = get_grade_data(0, request)
-            return render(request, "grade/manage_grade.html", {'output': output, 'message': 'loaded'})
-    except:
-        return HttpResponseRedirect(reverse("grade:login"))
+            return render(request, "grade/manage_grade.html", {'output': output, 'message': 'Loaded'})
+    # If cause Exception
+    except Exception as e:
+        return render(request, "grade/manage_grade.html", {'output': output, 'message': f'Error : {e}'})
 
 
-def delete_table_view(request, subject):
+
+
+def delete_table_view(request, grade_table_id):
     try:
-        grade_list = Grade.objects.filter(subject=subject)
-        for grade in grade_list:
-            for custom_field in grade.customfield.all():
-                custom_field.delete()
-            grade.delete()
+        grade_table = GradeTable.objects.get(id=grade_table_id,user=request.session['user_id'])
+        with connection.cursor() as cursor:
+            cursor.execute(f"DROP TABLE {grade_table.grade_table}")
+        grade_table.delete()
         output = get_grade_data(0, request)
-        return render(request, "grade/manage_grade.html", {'output': output, 'message': 'delete success'})
-    except:
+        return render(request, "grade/manage_grade.html", {'output': output, 'message': 'Delete Success'})
+    except Exception as e:
         output = get_grade_data(0, request)
-        return render(request, "grade/manage_grade.html", {'output': output, 'message': 'delete error'})
+        return render(request, "grade/manage_grade.html", {'output': output, 'message': f'Delete Error : {e}'})
 
 
 # Grade Page
@@ -147,3 +178,7 @@ def grade_view(request):
 
 def courese_list(request):
     return render(request, "grade/courese_list.html")
+
+def logout_view(request):
+    del request.session['user_id']
+    return HttpResponseRedirect(reverse("grade:login"))

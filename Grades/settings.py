@@ -78,8 +78,15 @@ WSGI_APPLICATION = 'Grades.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mariadb_grade',
+        'USER': 'root',
+        'PASSWORD': 'toor',
+        'HOST': '127.0.0.1',
+        'PORT': '3307',
+        'OPTIONS': {
+                    'charset': 'utf8',
+                    'use_unicode': True, },
     }
 }
 
@@ -126,3 +133,5 @@ STATICFILES_DIRS = [BASE_DIR / "static" ]
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
