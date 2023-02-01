@@ -9,9 +9,11 @@ __pycache__
  project/__pycache__
 db.sqlite3
 media
-static/dormitorys
-dormitory/migrations
-thread/migrations
+**/migrations/**
+*/migrations/*
+grade/migrations
+grade/migrations/*
+grade/migrations/**
 # Backup files # 
 *.bak 
 local*.py
