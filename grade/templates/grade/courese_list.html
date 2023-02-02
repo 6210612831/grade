@@ -5,6 +5,7 @@
 <style>
 </style>
 
+{% for grade_table in grade_table_list%}
 <div class="w3-col m9">
     <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
         <div class="w3-container light-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
@@ -18,10 +19,10 @@
                         &ensp;&ensp;ปีการศึกษา:<br>
                     </div>
                     <div class="col thai-font" style="font-size: 16px;">
-                        CN101<br>
-                        วิศวกรรมทางการแพทย์<br>
-                        000000<br>
-                        2565<br>
+                        {{grade_table.subject_id}}<br>
+                        {{grade_table.subject_name}}<br>
+                        {{grade_table.section}}<br>
+                        {{grade_table.year}}<br>
                     </div>
                 </div>
             </div>
@@ -32,9 +33,15 @@
                         <!-- <span style="margin-left: 1em; " class="font-red">
                             ไม่แสดง
                         </span> -->
+                        {% if grade_table.status == 0%}
+                        <span style="margin-left: 1em; " class="font-red">
+                            ไม่แสดง
+                        </span>
+                        {% else %}
                         <span style="margin-left: 1em; " class="font-green">
                             แสดง
                         </span>
+                        {% endif %}
                     </div>
                     <div class="col-md-2 thai-font" style="margin-top: 1em;">
                         <button class="btn-save ">
@@ -43,7 +50,7 @@
                     </div>
                     <div class="col thai-font">
                         <button class="btn-dagr">
-                            ลบ
+                            <a href="{% url 'grade:delete_table' grade_table.id %}" onclick="return confirm_delete()">ลบ</a>
                         </button>
                     </div>
                 </div>
@@ -52,5 +59,6 @@
         </div>
     </div>
 </div>
+{% endfor %}
 {% endblock %}
 

@@ -25,7 +25,7 @@ HOST = "https://restapi.engr.tu.ac.th"
 def index(request):
     try:
         if request.session['user_id']:
-            return render(request, "grade/grade.html")
+            return HttpResponseRedirect(reverse("grade:grade"))
     except:
         return render(request, "grade/login.html")
 
@@ -34,7 +34,7 @@ def index(request):
 def login_view(request):
     try:
         if request.session['user_id']:
-            return render(request, "grade/grade.html")
+            return HttpResponseRedirect(reverse("grade:grade"))
     except:
         if request.method == "POST":
             username = request.POST["username"]
@@ -52,7 +52,7 @@ def login_view(request):
                 request.session['login_status'] = username
                 request.session.modified = True
                 # return render(request, "web/policy.html")
-                return render(request, "grade/grade.html")
+                return HttpResponseRedirect(reverse("grade:grade"))
             else:
                 return render(request, "grade/login.html")
         return render(request, "grade/login.html")
@@ -136,7 +136,7 @@ def manage_grade_view(request):
                     # Insert each row of student data
                     with connection.cursor() as cursor:
                         cursor.execute(insert_data_sql)
-                return render(request, "grade/manage_grade.html", {'message': 'upload success'})
+                return render(request, "grade/courese_list.html", {'message': 'upload success'})
             # If upload file error
             except Exception as e:
                 output = get_grade_data(0, request)
@@ -147,7 +147,7 @@ def manage_grade_view(request):
             return render(request, "grade/manage_grade.html", {'output': output, 'message': 'Loaded'})
     # If cause Exception
     except Exception as e:
-        return render(request, "grade/manage_grade.html", {'output': output, 'message': f'Error : {e}'})
+        return render(request, "grade/manage_grade.html", { 'message': f'Error : {e}'})
 
 
 
@@ -170,14 +170,16 @@ def grade_view(request):
     try:
         request.session['user_id']
         # subject = 'cn203'
-        output = get_grade_data(1, request)
-        return render(request, "grade/grade.html", {'output': output})
+        grade_table_list = GradeTable.objects.filter(status=True)
+        return render(request, "grade/grade.html", {'grade_table_list': grade_table_list})
     except:
         return HttpResponseRedirect(reverse("grade:login"))
 
 
 def courese_list(request):
-    return render(request, "grade/courese_list.html")
+    grade_table_list = GradeTable.objects.filter(user=request.session['user_id'])
+    return render(request, "grade/courese_list.html", {'grade_table_list': grade_table_list})
+
 
 def logout_view(request):
     del request.session['user_id']

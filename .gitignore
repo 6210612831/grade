@@ -18,6 +18,11 @@ grade/migrations/**
 *.bak 
 local*.py
 
+
+# Files
+**.xlsx
+*.xlsx
+
 # If you are using PyCharm # 
 .idea/**/workspace.xml 
 .idea/**/tasks.xml 

@@ -35,10 +35,10 @@
             <a class="w3-bar-item w3-hide-medium w3-hide-large w3-right w3-padding-large w3-large blue-grotto misty-blue-h"
                 style="border-radius: 3px; height: 69px; width: 70px;" href="javascript:void(0);" onclick="openNav()"><i
                     class="fa fa-bars font-white " style="margin-top: 0.5em; margin-left: 0.2em;"></i></a>
-            <a href="#" class="w3-bar-item w3-padding-large size-18"></i><img src="/static/images/horizontal_Logo.png"
+            <a href="{% url 'grade:index' %}" class="w3-bar-item w3-padding-large size-18"></i><img src="/static/images/horizontal_Logo.png"
                     style="height:30;width:200px; margin-right: 1em;"></a>
             <div style="padding-top: 0.5em;">
-                <a href="#"
+                <a href="{% url 'grade:index' %}"
                     class="w3-bar-item w3-hide-small w3-padding-large thai-font ul-rm size-17 blue-grotto-h">
                     <i class="fa fa-home" style="font-size: 18px; margin-right: 1em;"></i>หน้าหลัก</a>
             </div>
@@ -63,11 +63,11 @@
     <!-- Navbar on small screens -->
     <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-hide-medium w3-large blue-grotto font-white"
         style="margin-top: 3.8em;">
-        <a href="#"
+        <a href="{% url 'grade:index' %}"
             class="w3-bar-item baby-blue-h w3-padding-large thai-font ul-rm size-17 font-black-h">
             <i class="fa fa-home" style="font-size: 18px; margin-right: 1em;"></i>หน้าหลัก
         </a>
-        <a href="#"
+        <a href="{% url 'grade:logout' %}"
             class="w3-bar-item baby-blue-h w3-padding-large thai-font ul-rm size-17 font-black-h">
             <i class="fa fa-sign-out" style="font-size: 18px; margin-right: 0.5em;"></i> ออกจากระบบ
         </a>
@@ -97,17 +97,24 @@
                         </div>
                         <p>
                             <i class="w3-margin-right w3-text-theme w3-padding-small "></i>
-                            <a href="#" class="ul-rm thai-font size-15 font-misty-blue-h">
+                            <a href="{% url 'grade:index' %}" class="ul-rm thai-font size-15 font-misty-blue-h">
                                 <i class="fa fa-home font-misty-blue-h" style="font-size: 18px; margin-right: 1em;"></i>
                                 หน้าหลัก
                             </a>
                         </p>
                         <p>
                             <i class="w3-margin-right w3-text-theme w3-padding-small"></i>
-                            <a href="#"
+                            <a href="{% url 'grade:manage_grade' %}"
                                 class="ul-rm thai-font size-15 font-misty-blue-h">
                                 <i class="fa fa-plus font-misty-blue-h" style="font-size: 18px; margin-right: 1em;"></i>
-                                สร้างแชนแนล</a>
+                                manage_grade</a>
+                        </p>
+                        <p>
+                            <i class="w3-margin-right w3-text-theme w3-padding-small"></i>
+                            <a href="{% url 'grade:courese_list' %}"
+                                class="ul-rm thai-font size-15 font-misty-blue-h">
+                                <i class="fa fa-plus font-misty-blue-h" style="font-size: 18px; margin-right: 1em;"></i>
+                                courese_list</a>
                         </p>
                     </div>
                 </div>

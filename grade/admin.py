@@ -11,3 +11,4 @@ from .models import *
 
 admin.site.register(CustomGradeField)
 admin.site.register(Grade)
+admin.site.register(GradeTable)

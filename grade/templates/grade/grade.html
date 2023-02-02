@@ -68,13 +68,17 @@
     <div class="w3-container w3-card w3-white w3-round w3-margin scroller"><br>
       <h4 class="thai-font" style="margin-left: 0.5em;">รายวิชาที่ประกาศคะแนนแล้ว &emsp13;&#128204;</h4>
       <hr class="w3-clear">
+      {% for grade_table in grade_table_list%}
       <p class="thai-font size-15" style="margin-bottom: -0.5em;">
-        <i class="fa fa-book" style="font-size: 16px; margin-right: 2em;"></i>CN101 - SECTION 000000 &emsp;ปีการศึกษาที่ 2/65
+        <i class="fa fa-book" style="font-size: 16px; margin-right: 2em;"></i>{{grade_table.subject_name}} - SECTION {{grade_table.section}} &emsp;ปีการศึกษาที่ {{grade_table.semestre}}/{{grade_table.year}}
         <a href="#" class="btn-read pull-right ul-rm size-13 font-charcoal-h">CLICK</a>
       </p>
       <hr>
+      {% endfor %}
+
     </div>
     <!-- end document -->
+    
     {% for table in output%}
     <table>
       <tr>
@@ -93,6 +97,7 @@
     </table>
     <hr>
     {% endfor %}
+
   </div>
   <script>
     document.getElementById("serchYear").placeholder = new Date().getFullYear();

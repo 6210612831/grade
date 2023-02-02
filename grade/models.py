@@ -56,9 +56,11 @@ class GradeTable(models.Model):
     desc = models.CharField(max_length=255,blank=False, null=False)
     user = models.CharField(max_length=255,blank=False, null=False)
     grade_table = models.CharField(max_length=255,blank=False, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Name : {self.subject_name} Section : {self.section} Year : {self.year} Semestre : {self.semestre} Course : {self.course}"
+        return f"Table Name : {self.grade_table} Status : {self.status} Created_at : {self.created_at} "
 
 
 
