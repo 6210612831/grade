@@ -14,6 +14,7 @@ urlpatterns = [
     path("manage_grade/", views.manage_grade_view, name="manage_grade"),
     path("grade/", views.grade_view, name="grade"),
     path("courese_list/", views.courese_list, name="courese_list"),
+    path("show_grade/<str:grade_table_id>",views.show_grade_view, name="show_grade"),
 
 
 ]

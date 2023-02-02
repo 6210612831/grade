@@ -71,7 +71,7 @@
       {% for grade_table in grade_table_list%}
       <p class="thai-font size-15" style="margin-bottom: -0.5em;">
         <i class="fa fa-book" style="font-size: 16px; margin-right: 2em;"></i>{{grade_table.subject_name}} - SECTION {{grade_table.section}} &emsp;ปีการศึกษาที่ {{grade_table.semestre}}/{{grade_table.year}}
-        <a href="#" class="btn-read pull-right ul-rm size-13 font-charcoal-h">CLICK</a>
+        <a href="{% url 'grade:show_grade' grade_table.id %}" class="btn-read pull-right ul-rm size-13 font-charcoal-h">CLICK</a>
       </p>
       <hr>
       {% endfor %}

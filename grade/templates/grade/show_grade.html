@@ -1,0 +1,41 @@
+{% extends "grade/layout.html" %}
+{% load my_tags %}
+
+{% block body %}
+<style>
+</style>
+
+{% if grade_table.grade_list != "None" %}
+<div class="w3-col m9">
+    <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
+        <div class="w3-container light-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
+           <br>
+            <div class="container">
+
+                <table>
+                    <tr>
+                      {% for header in grade_table.header_list %}
+                      <th>{{ header }}</th>
+                      {% endfor %}
+                    </tr>
+                    {% for grade in grade_table.grade_list %}
+                    <tr>
+                      {% for data in grade %}
+                        <td>{{ data }}</td>
+                      {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    <br>
+                  </table>
+
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+
+
