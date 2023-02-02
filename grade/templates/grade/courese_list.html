@@ -4,19 +4,31 @@
 {% block body %}
 <style>
 </style>
-
-{% for grade_table in grade_table_list%}
+<script language="javascript">
+    function confirm_delete() {
+            var answer = window.confirm("ยืนยันการลบ");
+            return answer;
+        }
+</script>
 <div class="w3-col m9">
-    <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
+    <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: 50px;"><br>
+        <h4 class="thai-font font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
+            รายวิชาที่ประกาศคะแนนแล้ว <i class="fa fa-bar-chart" style="font-size: 18px; margin-left: 0.5em;"></i>
+        </h4>
+    </div>
+</div>
+{% for grade_table in grade_table_list%}
+<div class="w3-col m9 ">
+    <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h" style="height: auto;"><br>
         <div class="w3-container light-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
            <br>
             <div class="container">
                 <div class="row">
                     <div class="col-md-2 thai-font" style="font-size: 16px;">
-                        1. รหัสวิชา:<br>
-                        &ensp;&ensp;ชื่อวิชา:<br>
-                        &ensp;&ensp;SECTION:<br>
-                        &ensp;&ensp;ปีการศึกษา:<br>
+                        รหัสวิชา:<br>
+                        ชื่อวิชา:<br>
+                        SECTION:<br>
+                        ปีการศึกษา:<br>
                     </div>
                     <div class="col thai-font" style="font-size: 16px;">
                         {{grade_table.subject_id}}<br>
@@ -28,7 +40,7 @@
             </div>
             <div class="container" style="margin-top: 1em;">
                 <div class="row">
-                    <div class="col-md-2 thai-font" style="margin-top: 1.5em; margin-left: 1em;">
+                    <div class="col-md-2 thai-font" style="margin-top: 1.5em;">
                         สถานะ: 
                         <!-- <span style="margin-left: 1em; " class="font-red">
                             ไม่แสดง
@@ -44,13 +56,24 @@
                         {% endif %}
                     </div>
                     <div class="col-md-2 thai-font" style="margin-top: 1em;">
+                        <button class="btn-change">
+                            <a href="{% url 'grade:change_status' grade_table.id %}" class="ul-rm font-black-h">
+                                <p class="thai-font " style="margin-top:0.3em">เปลี่ยนสถานะ</p>
+                            </a>
+                        </button>
+                    </div>
+                    <div class="col-md-2 thai-font" style="margin-top: 1em;">
                         <button class="btn-save ">
-                            รายละเอียด
+                            <a href="{% url 'grade:course_info' %}" class="ul-rm font-white-h">
+                                <p class="thai-font " style="margin-top:0.3em">รายละเอียด</p>
+                            </a>
                         </button>
                     </div>
                     <div class="col thai-font">
                         <button class="btn-dagr">
-                            <a href="{% url 'grade:delete_table' grade_table.id %}" onclick="return confirm_delete()">ลบ</a>
+                            <a href="{% url 'grade:delete_table' grade_table.id %}" class="ul-rm font-black-h" onclick="return confirm_delete()">
+                                <p class="thai-font" style="margin-top:0.3em">ลบ</p>
+                            </a>
                         </button>
                     </div>
                 </div>

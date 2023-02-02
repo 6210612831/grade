@@ -3,15 +3,33 @@
 
 {% block body %}
 <style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 95.5%;
+    margin-top: 0.5em;
+    margin-left: 1.25em;
+  }
+
+  td,
+  th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding-left: 1em;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f0f0f0;
+  }
 </style>
 
 {% if grade_table.grade_list != "None" %}
 <div class="w3-col m9">
     <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
         <div class="w3-container light-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
-           <br>
             <div class="container">
-
                 <table>
                     <tr>
                       {% for header in grade_table.header_list %}

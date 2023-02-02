@@ -61,7 +61,7 @@ alert('{{message}}');
 <div class="w3-col m9">
     <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: 50px;"><br>
       <h4 class="thai-font font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
-        อัปโหลดคะแนนสอบ 
+        อัปโหลดคะแนนสอบ <i class="fa fa-plus" style="font-size: 18px; margin-left: 0.5em;"></i>
       </h4>
     </div>
   <!-- <form method="post" action="{% url 'grade:manage_grade' %}" enctype="multipart/form-data">
@@ -102,11 +102,7 @@ alert('{{message}}');
           </div>
           <div class="col-md-auto">
             <label for="semestre">ภาคการศึกษา</label>
-            <select id="semestre" class="form-select" aria-label="Default select" style="width: 250px;" name="semestre">
-              <option selected="">โปรดเลือกภาคการศึกษา</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
+            <input type="text" id="semestre" placeholder="" name="semestre" class="form-control" style="width: 250px;">
           </div>
         </div>
         <br>
@@ -151,31 +147,7 @@ alert('{{message}}');
       </form>
     </div>
   </div>
-    
-  <hr class="w3-col m11">
-
-  {% for table in output%}
-    <br>
-    Table_Name : {{table.table_name}} 
-    <br>
-    <a href="{% url 'grade:delete_table' table.grade_table_id %}" onclick="return confirm_delete()">Delete</a>
-    <table>
-      <tr>
-        {% for header in table.header_list %}
-        <th>{{ header }}</th>
-        {% endfor %}
-
-      </tr>
-      {% for grade in table.grade_list %}
-      <tr>
-        {% for data in grade %}
-          <td>{{ data }}</td>
-        {% endfor %}
-      </tr>
-      {% endfor %}
-      <br>
-    </table>
-  {% endfor %}
+  
   <hr class="w3-col m11">
   </div>
   <script>
@@ -185,6 +157,10 @@ alert('{{message}}');
     var mounth = date.getMonth() + 1
     if(mounth >=1 && mounth < 8){
       year -= 1;
+      document.getElementById("semestre").value = 2;
+    }
+    else{
+      document.getElementById("semestre").value = 1;
     }
     document.getElementById("year").value = year;
   </script>
