@@ -14,7 +14,11 @@ urlpatterns = [
     path("manage_grade/", views.manage_grade_view, name="manage_grade"),
     path("grade/", views.grade_view, name="grade"),
     path("courese_list/", views.courese_list, name="courese_list"),
-    path("show_grade/<str:grade_table_id>",views.show_grade_view, name="show_grade"),
-
+    path("show_grade/<str:grade_table_id>",
+         views.show_grade_view, name="show_grade"),
+    path("change_status/<str:grade_table_id>",
+         views.change_status_view, name="change_status"),
+    path("course_info",
+         views.course_info, name="course_info"),
 
 ]
