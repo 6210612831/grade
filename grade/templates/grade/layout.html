@@ -40,7 +40,15 @@
             <div style="padding-top: 0.5em;">
                 <a href="{% url 'grade:index' %}"
                     class="w3-bar-item w3-hide-small w3-padding-large thai-font ul-rm size-17 blue-grotto-h">
-                    <i class="fa fa-home" style="font-size: 18px; margin-right: 1em;"></i>หน้าหลัก</a>
+                    <i class="fa fa-home" style="font-size: 18px; margin-right: 1em;"></i>หน้าแรก</a>
+                <a href="{% url 'grade:manage_grade' %}"
+                    class="w3-bar-item w3-hide-small w3-padding-large thai-font ul-rm size-17 blue-grotto-h">
+                    <i class="fa fa-plus" style="font-size: 18px; margin-right: 1em;"></i>อัปโหลดคะแนนสอบ
+                </a>
+                <a href="{% url 'grade:courese_list' %}"
+                    class="w3-bar-item w3-hide-small w3-padding-large thai-font ul-rm size-17 blue-grotto-h">
+                    <i class="fa fa-bar-chart" style="font-size: 18px; margin-right: 1em;"></i>รายวิชาที่ประกาศคะแนนแล้ว
+                </a>
             </div>
             <!-- <div class="w3-dropdown-hover w3-hide-small">
                 <button class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span
@@ -65,7 +73,14 @@
         style="margin-top: 3.8em;">
         <a href="{% url 'grade:index' %}"
             class="w3-bar-item baby-blue-h w3-padding-large thai-font ul-rm size-17 font-black-h">
-            <i class="fa fa-home" style="font-size: 18px; margin-right: 1em;"></i>หน้าหลัก
+            <i class="fa fa-home" style="font-size: 18px; margin-right: 1em;"></i>หน้าแรก
+        </a>
+        <a href="{% url 'grade:manage_grade' %}" class="w3-bar-item baby-blue-h w3-padding-large thai-font ul-rm size-17 font-black-h">
+            <i class="fa fa-plus" style="font-size: 18px; margin-right: 1em;"></i>อัปโหลดคะแนนสอบ
+        </a>
+        <a href="{% url 'grade:courese_list' %}"
+            class="w3-bar-item baby-blue-h w3-padding-large thai-font ul-rm size-17 font-black-h">
+            <i class="fa fa-bar-chart" style="font-size: 18px; margin-right: 1em;"></i>รายวิชาที่ประกาศคะแนนแล้ว
         </a>
         <a href="{% url 'grade:logout' %}"
             class="w3-bar-item baby-blue-h w3-padding-large thai-font ul-rm size-17 font-black-h">
@@ -99,7 +114,7 @@
                             <i class="w3-margin-right w3-text-theme w3-padding-small "></i>
                             <a href="{% url 'grade:index' %}" class="ul-rm thai-font size-15 font-misty-blue-h">
                                 <i class="fa fa-home font-misty-blue-h" style="font-size: 18px; margin-right: 1em;"></i>
-                                หน้าหลัก
+                                หน้าแรก
                             </a>
                         </p>
                         <p>
@@ -107,14 +122,14 @@
                             <a href="{% url 'grade:manage_grade' %}"
                                 class="ul-rm thai-font size-15 font-misty-blue-h">
                                 <i class="fa fa-plus font-misty-blue-h" style="font-size: 18px; margin-right: 1em;"></i>
-                                manage_grade</a>
+                                อัปโหลดคะแนนสอบ</a>
                         </p>
                         <p>
                             <i class="w3-margin-right w3-text-theme w3-padding-small"></i>
                             <a href="{% url 'grade:courese_list' %}"
                                 class="ul-rm thai-font size-15 font-misty-blue-h">
-                                <i class="fa fa-plus font-misty-blue-h" style="font-size: 18px; margin-right: 1em;"></i>
-                                courese_list</a>
+                                <i class="fa fa-bar-chart font-misty-blue-h" style="font-size: 18px; margin-right: 0.7em;"></i>
+                                รายวิชาที่ประกาศคะแนนแล้ว</a>
                         </p>
                     </div>
                 </div>

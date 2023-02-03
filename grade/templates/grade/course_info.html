@@ -1,0 +1,51 @@
+{% extends "grade/layout.html" %}
+{% load my_tags %}
+
+{% block body %}
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 95.5%;
+        margin-top: 0.5em;
+        margin-left: 1.25em;
+    }
+
+    td,
+    th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding-left: 1em;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f0f0f0;
+    }
+</style>
+
+{% for table in output %}
+    <br>
+    Table_Name : {{table.table_name}} 
+    <br>
+    <a href="{% url 'grade:delete_table' table.grade_table_id %}" onclick="return confirm_delete()">Delete</a>
+    <table>
+      <tr>
+        {% for header in table.header_list %}
+        <th>{{ header }}</th>
+        {% endfor %}
+
+      </tr>
+      {% for grade in table.grade_list %}
+      <tr>
+        {% for data in grade %}
+          <td>{{ data }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+      <br>
+    </table>
+  {% endfor %}
+
+{% endblock %}

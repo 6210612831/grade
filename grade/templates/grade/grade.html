@@ -1,7 +1,7 @@
 {% extends "grade/layout.html" %}
 {% load my_tags %}
 
-{% block body %} 
+{% block body %}
   <title>ประกาศคะแนนสอบ</title>
   <div class="w3-col m9">
     <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: 50px;"><br>
@@ -9,76 +9,65 @@
         ประกาศคะแนนสอบ &emsp13;&#128226;
       </h4>
     </div>
-  <br>
-  <!-- search -->
+    <br>
+    <!-- search -->
   
-  <div class="row justify-content-md-center">
-    <div class="col-md-auto">
-      <div class="w3-container w3-card w3-round baby-blue3"><br>
-        <p class="thai-font size-17 font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
-          ค้นหา รายวิชา
-        </p>
-        <form class="form-inline d-flex ">
-          <input class="form-control thai-font" id="serchChannel" type="text" placeholder="ค้นหารายวิชา ..."
-            style="width: 400px;">
-          <button class="btn-circle" style="margin-left: 1em;">
-            <i class="fa fa-search"></i>
-          </button>
-        </form>
-        <br>
-      </div>
-      <br>
-    </div>
-  
-    <div class="col-md-auto">
-      <div class="w3-container w3-card w3-round baby-blue3"><br>
-        <p class="thai-font size-17 font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
-          ค้นหา ปี (คศ.)
-        </p>
-        <form class="form-inline d-flex ">
-          <input class="form-control thai-font" id="serchYear" type="text"
-            style="width: 400px;">
-          <button class="btn-circle" style="margin-left: 1em;">
-            <i class="fa fa-search"></i>
-          </button>
-        </form>
-        <br>
-      </div>
-      <br>
-    </div>
-  </div>
-  <!-- end serch -->
-  <!-- ถ้ายังไม่มีการค้นหา -->
-  <div class="w3-row-padding w3-container w3-card w3-round w3-margin red box-shadow-h" style="height: 60px;"><br>
-    <p class="thai-font size-15 font-white" style="margin-left: 0.5em;">
-      ไม่พบข้อมูลของท่าน
-    </p>
-  </div>
-    <a href="#" class="font-midnight-blue-h ">
-      <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h" style="height: 80px;"><br>
-        <div class="w3-container light-green" style="margin-left: 0.5em; margin-top: -1.5em; height: 80px;">
-          <p style="margin-top: 2em; margin-left: 1em;" class="thai-font size-15">
-              วิชาที่ลงทะเบียน
+    <div class="row" style="margin-left: 0.5em;">
+      <div class="col-md-auto">
+        <div class="w3-container w3-card w3-round baby-blue3"><br>
+          <p class="thai-font size-17 font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
+            ค้นหา
           </p>
+          <form class="form-inline d-flex ">
+            <input class="form-control thai-font" id="serchChannel" type="text" placeholder="โปรดใส่รหัสวิชา ..."
+              style="width: 400px;">
+            <button class="btn-circle" style="margin-left: 1em;">
+              <i class="fa fa-search"></i>
+            </button>
+          </form>
+          <br>
         </div>
+        <br>
       </div>
-    </a>
-    
+    </div>
+    <!-- end serch -->
+    <!-- ถ้ายังไม่มีการค้นหา -->
+    <div class="w3-row-padding w3-container w3-card w3-round w3-margin red box-shadow-h" style="height: 60px;"><br>
+      <p class="thai-font size-15 font-white" style="margin-left: 0.5em;">
+        ไม่พบข้อมูลของท่าน
+      </p>
+    </div>
+    <!-- -->
+    <!-- วิชาที่ค้นหาเจอ -->
+    <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
+      <div class="w3-container light-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
+          <a href="#" class=" ul-rm font-black font-black-h">
+            <p class="thai-font size-18" style="margin-top: 1em;">
+              test - SECTION 00000 ปีการศึกษาที่ 2/2565
+            </p>
+          </a>
+      </div>
+    </div>
+    <!-- -->
     <!-- ประกาศ -->
     <div class="w3-container w3-card w3-white w3-round w3-margin scroller"><br>
       <h4 class="thai-font" style="margin-left: 0.5em;">รายวิชาที่ประกาศคะแนนแล้ว &emsp13;&#128204;</h4>
       <hr class="w3-clear">
       {% for grade_table in grade_table_list%}
-      <p class="thai-font size-15" style="margin-bottom: -0.5em;">
-        <i class="fa fa-book" style="font-size: 16px; margin-right: 2em;"></i>{{grade_table.subject_name}} - SECTION {{grade_table.section}} &emsp;ปีการศึกษาที่ {{grade_table.semestre}}/{{grade_table.year}}
+      <p class="thai-font size-17" style="margin-bottom: -0.5em;">
+        <i class="fa fa-book" style="font-size: 16px; margin-right: 1em;"></i>
+          {{grade_table.subject_id}} - SECTION {{grade_table.section}} &emsp;ปีการศึกษาที่ {{grade_table.semestre}}/{{grade_table.year}}
         <a href="{% url 'grade:show_grade' grade_table.id %}" class="btn-read pull-right ul-rm size-13 font-charcoal-h">CLICK</a>
       </p>
+      <br>
+      <p id="desc" class="thai-font size-15" style="margin-left: 2.3em;">หมายเหตุ: {{grade_table.desc}}</p>
       <hr>
+
       {% endfor %}
 
     </div>
     <!-- end document -->
-    
+      
     {% for table in output%}
     <table>
       <tr>
@@ -99,9 +88,9 @@
     {% endfor %}
 
   </div>
-  <script>
-    document.getElementById("serchYear").placeholder = new Date().getFullYear();
-  </script>
+<script>
+  document.getElementById("serchYear").placeholder = new Date().getFullYear();
+</script>
 {% endblock %}
 
     <!-- End Grid -->
