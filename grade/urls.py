@@ -18,7 +18,7 @@ urlpatterns = [
          views.show_grade_view, name="show_grade"),
     path("change_status/<str:grade_table_id>",
          views.change_status_view, name="change_status"),
-    path("course_info",
+    path("course_info/<str:grade_table_id>",
          views.course_info, name="course_info"),
      path("search_subject/", views.search_subject_view, name="search_subject"),
 

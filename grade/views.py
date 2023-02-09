@@ -239,9 +239,37 @@ def change_status_view(request, grade_table_id):
         return HttpResponseRedirect(reverse("grade:courese_list"))
 
 
-def course_info(request):
+def course_info(request, grade_table_id):
     check_session(request)
-    return render(request, "grade/course_info.html")
+
+    grade_table = ""
+    try:
+        grade_table_data = GradeTable.objects.get(id=grade_table_id)
+        header_list = []
+        # get cloumn name
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_NAME`=\'"+grade_table_data.grade_table+"\';")
+            products = cursor.fetchall()
+            # Column name to list
+            for column_name in products:
+                header_list.append(column_name[0])
+            # print(header_list)
+        with connection.cursor() as cursor:
+            cursor.execute(
+                f"SELECT * FROM {grade_table_data.grade_table} WHERE '1';")
+            grade_table = cursor.fetchall()
+
+    except:
+        pass
+    if grade_table == ():
+        grade_table = "None"
+        output = {'grade_list': grade_table}
+    else:
+        output = {'grade_list': grade_table, 'header_list': header_list,
+                  'table_name': grade_table_data.grade_table, 'grade_table_id': grade_table_data.id}
+    return render(request, "grade/course_info.html", {'grade_table': output})
+
 
 
 def search_subject_view(request):
