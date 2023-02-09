@@ -19,6 +19,11 @@ HOST = "https://restapi.engr.tu.ac.th"
 
 # Create your views here.
 
+def check_session(request):
+    try:
+        request.session['user_id']
+    except:
+        return HttpResponseRedirect(reverse("grade:login"))
 
 def index(request):
     try:
@@ -58,6 +63,7 @@ def login_view(request):
 
 # Load grade data
 def get_grade_data(choice, request):
+    check_session(request)
     output = []
     grade_table_list = GradeTable.objects.filter(
         user=request.session['user_id'])
@@ -179,6 +185,7 @@ def grade_view(request):
 
 
 def courese_list(request):
+    check_session(request)
     grade_table_list = GradeTable.objects.filter(
         user=request.session['user_id'])
     return render(request, "grade/courese_list.html", {'grade_table_list': grade_table_list})
@@ -190,6 +197,7 @@ def logout_view(request):
 
 
 def show_grade_view(request, grade_table_id):
+    check_session(request)
     grade_table = ""
     try:
         grade_table_data = GradeTable.objects.get(id=grade_table_id)
@@ -220,6 +228,7 @@ def show_grade_view(request, grade_table_id):
 
 
 def change_status_view(request, grade_table_id):
+    check_session(request)
     try:
         grade_table = GradeTable.objects.get(
             id=grade_table_id, user=request.session['user_id'])
@@ -231,4 +240,15 @@ def change_status_view(request, grade_table_id):
 
 
 def course_info(request):
+    check_session(request)
     return render(request, "grade/course_info.html")
+
+
+def search_subject_view(request):
+    check_session(request)
+    search_subject_list=[]
+    if request.method == 'POST':
+        search_subject_key = request.POST["search_subject_key"]
+        search_subject_list = GradeTable.objects.filter(subject_id=search_subject_key,status=True)
+    grade_table_list = GradeTable.objects.filter(status=True)
+    return render(request, "grade/grade.html", {'grade_table_list': grade_table_list,'search_subject_list':search_subject_list})

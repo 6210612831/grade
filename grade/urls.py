@@ -20,5 +20,6 @@ urlpatterns = [
          views.change_status_view, name="change_status"),
     path("course_info",
          views.course_info, name="course_info"),
+     path("search_subject/", views.search_subject_view, name="search_subject"),
 
 ]

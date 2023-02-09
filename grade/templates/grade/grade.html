@@ -18,10 +18,11 @@
           <p class="thai-font size-17 font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
             ค้นหา
           </p>
-          <form class="form-inline d-flex ">
-            <input class="form-control thai-font" id="serchChannel" type="text" placeholder="โปรดใส่รหัสวิชา ..."
+          <form method="post" action="{% url 'grade:search_subject' %}" class="form-inline d-flex ">
+            {% csrf_token %}
+            <input class="form-control thai-font" id="search_subject_key" name="search_subject_key" type="text" placeholder="โปรดใส่รหัสวิชา ..."
               style="width: 400px;">
-            <button class="btn-circle" style="margin-left: 1em;">
+            <button class="btn-circle" style="margin-left: 1em;" type="submit">
               <i class="fa fa-search"></i>
             </button>
           </form>
@@ -32,22 +33,27 @@
     </div>
     <!-- end serch -->
     <!-- ถ้ายังไม่มีการค้นหา -->
+    {% if not search_subject_list%}
     <div class="w3-row-padding w3-container w3-card w3-round w3-margin red box-shadow-h" style="height: 60px;"><br>
       <p class="thai-font size-15 font-white" style="margin-left: 0.5em;">
         ไม่พบข้อมูลของท่าน
       </p>
     </div>
+    {% else %}
     <!-- -->
     <!-- วิชาที่ค้นหาเจอ -->
+    {% for search_subject in search_subject_list%}
     <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
       <div class="w3-container light-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
-          <a href="#" class=" ul-rm font-black font-black-h">
+          <a href="{% url 'grade:show_grade' search_subject.id %}" class=" ul-rm font-black font-black-h">
             <p class="thai-font size-18" style="margin-top: 1em;">
-              test - SECTION 00000 ปีการศึกษาที่ 2/2565
+              {{search_subject.subject_id}} - SECTION {{search_subject.section}} &emsp;ปีการศึกษาที่ {{search_subject.semestre}}/{{search_subject.year}}
             </p>
           </a>
       </div>
     </div>
+    {% endfor %}
+    {% endif %}
     <!-- -->
     <!-- ประกาศ -->
     <div class="w3-container w3-card w3-white w3-round w3-margin scroller"><br>
