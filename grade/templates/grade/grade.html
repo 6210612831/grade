@@ -60,10 +60,12 @@
       <h4 class="thai-font" style="margin-left: 0.5em;">รายวิชาที่ประกาศคะแนนแล้ว &emsp13;&#128204;</h4>
       <hr class="w3-clear">
       {% for grade_table in grade_table_list%}
-      <p class="thai-font size-17" style="margin-bottom: -0.5em;">
-        <i class="fa fa-book" style="font-size: 16px; margin-right: 1em;"></i>
-          {{grade_table.subject_id}} - SECTION {{grade_table.section}} &emsp;ปีการศึกษาที่ {{grade_table.semestre}}/{{grade_table.year}}
-        <a href="{% url 'grade:show_grade' grade_table.id %}" class="btn-read pull-right ul-rm size-13 font-charcoal-h">CLICK</a>
+      <p class="size-17" style="margin-bottom: -0.5em;">
+        <a href="{% url 'grade:show_grade' grade_table.id %}" class=" ul-rm font-black font-black-h thai-font ">
+          <i class="fa fa-book font-midnight-blue-h" style="font-size: 16px; margin-right: 1em;"></i>
+          <strong class="font-midnight-blue-h">{{grade_table.subject_id}} - SECTION {{grade_table.section}} &emsp;ปีการศึกษาที่ {{grade_table.semestre}}/{{grade_table.year}}</strong>
+        </a>
+        <a href="{% url 'grade:show_grade' grade_table.id %}" class="btn-read pull-right ul-rm size-13 font-charcoal-h ">CLICK</a>
       </p>
       <br>
       <p id="desc" class="thai-font size-15" style="margin-left: 2.3em;">หมายเหตุ: {{grade_table.desc}}</p>

@@ -17,71 +17,73 @@
         </h4>
     </div>
 </div>
-{% for grade_table in grade_table_list%}
-<div class="w3-col m9 ">
-    <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h" style="height: auto;"><br>
-        <div class="w3-container light-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
-           <br>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-2 thai-font" style="font-size: 16px;">
-                        รหัสวิชา:<br>
-                        ชื่อวิชา:<br>
-                        SECTION:<br>
-                        ปีการศึกษา:<br>
-                    </div>
-                    <div class="col thai-font" style="font-size: 16px;">
-                        {{grade_table.subject_id}}<br>
-                        {{grade_table.subject_name}}<br>
-                        {{grade_table.section}}<br>
-                        {{grade_table.year}}<br>
-                    </div>
-                </div>
-            </div>
-            <div class="container" style="margin-top: 1em;">
-                <div class="row">
-                    <div class="col-md-2 thai-font" style="margin-top: 1.5em;">
-                        สถานะ: 
-                        <!-- <span style="margin-left: 1em; " class="font-red">
-                            ไม่แสดง
-                        </span> -->
-                        {% if grade_table.status == 0%}
-                        <span style="margin-left: 1em; " class="font-red">
-                            ไม่แสดง
-                        </span>
-                        {% else %}
-                        <span style="margin-left: 1em; " class="font-green">
-                            แสดง
-                        </span>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-2 thai-font" style="margin-top: 1em;">
-                        <button class="btn-change">
-                            <a href="{% url 'grade:change_status' grade_table.id %}" class="ul-rm font-black-h">
-                                <p class="thai-font " style="margin-top:0.3em">เปลี่ยนสถานะ</p>
-                            </a>
-                        </button>
-                    </div>
-                    <div class="col-md-2 thai-font" style="margin-top: 1em;">
-                        <button class="btn-save ">
-                            <a href="{% url 'grade:course_info' grade_table.id %}" class="ul-rm font-white-h">
-                                <p class="thai-font " style="margin-top:0.3em">รายละเอียด</p>
-                            </a>
-                        </button>
-                    </div>
-                    <div class="col thai-font">
-                        <button class="btn-dagr">
-                            <a href="{% url 'grade:delete_table' grade_table.id %}" class="ul-rm font-black-h" onclick="return confirm_delete()">
-                                <p class="thai-font" style="margin-top:0.3em">ลบ</p>
-                            </a>
-                        </button>
+
+<div style="height: auto;" class="w3-col m9">
+    {% for grade_table in grade_table_list%}
+        <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h" style="height: auto;"><br>
+            <div class="w3-container light-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
+                <br>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-2 thai-font" style="font-size: 16px;">
+                            รหัสวิชา:<br>
+                            ชื่อวิชา:<br>
+                            SECTION:<br>
+                            ปีการศึกษา:<br>
+                        </div>
+                        <div class="col thai-font" style="font-size: 16px;">
+                            {{grade_table.subject_id}}<br>
+                            {{grade_table.subject_name}}<br>
+                            {{grade_table.section}}<br>
+                            {{grade_table.year}}<br>
+                        </div>
                     </div>
                 </div>
+                <div class="container" style="margin-top: 1em;">
+                    <div class="row">
+                        <div class="col-md-2 thai-font" style="margin-top: 1.5em;">
+                            สถานะ:
+                            <!-- <span style="margin-left: 1em; " class="font-red">
+                                    ไม่แสดง
+                                </span> -->
+                            {% if grade_table.status == 0%}
+                            <span style="margin-left: 1em; " class="font-red">
+                                ไม่แสดง
+                            </span>
+                            {% else %}
+                            <span style="margin-left: 1em; " class="font-green">
+                                แสดง
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-2 thai-font" style="margin-top: 1em;">
+                            <button class="btn-change">
+                                <a href="{% url 'grade:change_status' grade_table.id %}" class="ul-rm font-black-h">
+                                    <p class="thai-font " style="margin-top:0.3em">เปลี่ยนสถานะ</p>
+                                </a>
+                            </button>
+                        </div>
+                        <div class="col-md-2 thai-font" style="margin-top: 1em;">
+                            <button class="btn-save ">
+                                <a href="{% url 'grade:course_info' grade_table.id %}" class="ul-rm font-white-h">
+                                    <p class="thai-font " style="margin-top:0.3em">รายละเอียด</p>
+                                </a>
+                            </button>
+                        </div>
+                        <div class="col thai-font">
+                            <button class="btn-dagr">
+                                <a href="{% url 'grade:delete_table' grade_table.id %}" class="ul-rm font-black-h"
+                                    onclick="return confirm_delete()">
+                                    <p class="thai-font" style="margin-top:0.3em">ลบ</p>
+                                </a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <br>
             </div>
-            <br>
         </div>
-    </div>
+    {% endfor %}
 </div>
-{% endfor %}
 {% endblock %}
 
