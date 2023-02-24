@@ -55,7 +55,10 @@ function confirm_delete()
         var answer = window.confirm("ยืนยันการลบ");
         return answer;
     }
-alert('{{message}}');
+if('{{message}}' != ""){
+  alert('{{message}}');
+}
+
 </script>
 
 <div class="w3-col m9">

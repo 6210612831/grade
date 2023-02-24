@@ -47,7 +47,7 @@ def login_view(request):
                 'password': password
             }
             response = requests.post(
-                HOST+'/api/v1/authentication/', data=data)
+                HOST+' ', data=data)
             if response.status_code == status.HTTP_200_OK:
                 request.session['user_id'] = username
                 # print(request.session['user_id'])
@@ -130,8 +130,8 @@ def manage_grade_view(request):
                 try:
                     with connection.cursor() as cursor:
                         cursor.execute(create_table_sql)
-                except:
-                    return render(request, "grade/manage_grade.html", {'message': 'table is already exist,Please delete old table'})
+                except Exception as e:
+                    return render(request, "grade/manage_grade.html", {'message': 'Exel File Error : {e} or (Maybe table is already exist)'})
 
                 # Upload exel to table
                 for student in student_list:
@@ -153,28 +153,31 @@ def manage_grade_view(request):
         # Load data to manage_grade page
         else:
             output = get_grade_data(0, request)
-            return render(request, "grade/manage_grade.html", {'output': output, 'message': 'Loaded'})
+            return render(request, "grade/manage_grade.html", {'output': output})
     # If cause Exception
     except Exception as e:
         return render(request, "grade/manage_grade.html", {'message': f'Error : {e}'})
 
 
 def delete_table_view(request, grade_table_id):
+    check_session(request)
     try:
         grade_table = GradeTable.objects.get(
             id=grade_table_id, user=request.session['user_id'])
         with connection.cursor() as cursor:
             cursor.execute(f"DROP TABLE {grade_table.grade_table}")
         grade_table.delete()
-        output = get_grade_data(0, request)
-        return render(request, "grade/manage_grade.html", {'output': output, 'message': 'Delete Success'})
+        grade_table_list = GradeTable.objects.filter(user=request.session['user_id'])
+        return render(request, "grade/courese_list.html", {'grade_table_list': grade_table_list,'message': 'Delete Success'})
+
     except Exception as e:
-        output = get_grade_data(0, request)
-        return render(request, "grade/manage_grade.html", {'output': output, 'message': f'Delete Error : {e}'})
+        grade_table_list = GradeTable.objects.filter(user=request.session['user_id'])
+        return render(request, "grade/courese_list.html", {'grade_table_list': grade_table_list,'message': f'Delete Error : {e}'})
 
 
 # Grade Page
 def grade_view(request):
+    check_session(request)
     try:
         request.session['user_id']
         # subject = 'cn203'
@@ -243,6 +246,18 @@ def course_info(request, grade_table_id):
     check_session(request)
 
     grade_table = ""
+    student_num = 0
+    summary_grade ={
+        'A':0,
+        'BB':0,
+        'B':0,
+        'CC':0,
+        'C':0,
+        'DD':0,
+        'D':0,
+        'F':0,
+        'W':0,
+    }
     try:
         grade_table_data = GradeTable.objects.get(id=grade_table_id)
         header_list = []
@@ -259,6 +274,21 @@ def course_info(request, grade_table_id):
             cursor.execute(
                 f"SELECT * FROM {grade_table_data.grade_table} WHERE '1';")
             grade_table = cursor.fetchall()
+        with connection.cursor() as cursor:
+            cursor.execute(
+                f"SELECT grade FROM {grade_table_data.grade_table} WHERE '1';")
+            grade_field = cursor.fetchall()
+            print(grade_field)
+        for grade in grade_field:
+            if grade[0] == 'B+':
+                summary_grade['BB']+=1
+            elif grade[0] == 'C+':
+                summary_grade['CC']+=1
+            elif grade[0] == 'D+':
+                summary_grade['DD']+=1
+            else:    
+                summary_grade[grade[0]]+=1
+            student_num+=1
 
     except:
         pass
@@ -268,7 +298,7 @@ def course_info(request, grade_table_id):
     else:
         output = {'grade_list': grade_table, 'header_list': header_list,
                   'table_name': grade_table_data.grade_table, 'grade_table_id': grade_table_data.id}
-    return render(request, "grade/course_info.html", {'grade_table': output})
+    return render(request, "grade/course_info.html", {'grade_table': output,'summary_grade':summary_grade,'student_num':student_num})
 
 
 

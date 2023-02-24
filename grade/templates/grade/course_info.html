@@ -49,6 +49,7 @@
             <br>
         </div>
     </div>
+    {% if student_num != 0 %}
     <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
         <div class="w3-container white" style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
             <div class="container" style="margin-top: 1em; margin-bottom: 1em;">
@@ -61,25 +62,39 @@
                             </tr>
                             <tr>
                                 <td>A</td>
-                                <td>60</td>
+                                <td>{{summary_grade.A}}</td>
                             </tr>
                             <tr>
                                 <td>B+</td>
+                                <td>{{summary_grade.BB}}</td>
+                            </tr>
+                            <tr>
+                                <td>B</td>
+                                <td>{{summary_grade.B}}</td>
                             </tr>
                             <tr>
                                 <td>C+</td>
+                                <td>{{summary_grade.CC}}</td>
                             </tr>
                             <tr>
                                 <td>C</td>
+                                <td>{{summary_grade.C}}</td>
                             </tr>
                             <tr>
                                 <td>D+</td>
+                                <td>{{summary_grade.DD}}</td>
                             </tr>
                             <tr>
                                 <td>D</td>
+                                <td>{{summary_grade.D}}</td>
                             </tr>
                             <tr>
                                 <td>F</td>
+                                <td>{{summary_grade.F}}</td>
+                            </tr>
+                            <tr>
+                                <td>W</td>
+                                <td>{{summary_grade.W}}</td>
                             </tr>
                         </table>
                     </div>
@@ -87,7 +102,7 @@
                         <table style="width: 220px;" class="thai-font">
                             <tr>
                                 <th>จำนวนนักศึกษาทั้งหมด</td>
-                                <th>20</th>
+                                <th>{{student_num}}</th>
                             </tr>
                         </table>
                         <table style="width: 220px;" class="thai-font">
@@ -101,6 +116,7 @@
             </div>       
         </div>
     </div>
+    {% endif %}
 </div>
 {% endif %}
 
