@@ -60,7 +60,7 @@ if('{{message}}' != ""){
 }
 
 </script>
-
+<title>อัปโหลดคะแนนสอบ</title>
 <div class="w3-col m9">
     <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: 50px;"><br>
       <h4 class="thai-font font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
@@ -85,62 +85,67 @@ if('{{message}}' != ""){
         {% csrf_token %}
         <div class="row thai-font" style="margin-left: 2em; font-size: 16px; margin-top: 2em;">
           <div class="col-md-auto">
-            <label for="sid" >รหัสวิชา </label>
-            <input type="text" id="sid" placeholder="" name="sid" class="form-control" style="width: 250px;">
+            <label for="sid" >รหัสวิชา<span class="font-red"> *</span></label>
+            <input type="text" id="sid" placeholder="" name="sid" class="form-control" style="width: 250px;" required>
           </div>
           <div class="col-md-auto">
-            <label for="sname">ชื่อวิชา</label>
-          <input type="text" id="sname" placeholder="" name="sname" class="form-control" style="width: 250px;">
+            <label for="sname">ชื่อวิชา<span class="font-red"> *</span></label>
+          <input type="text" id="sname" placeholder="" name="sname" class="form-control" style="width: 250px;" required>
           </div>
           <div class="col-md-auto">
-            <label for="section">SECTION</label>
-            <input type="text" id="section" placeholder="" name="section" class="form-control" style="width: 250px;">
+            <label for="section">SECTION<span class="font-red"> *</span></label>
+            <input type="text" id="section" placeholder="" name="section" class="form-control" style="width: 250px;" required>
           </div>
         </div>
         <br>
         <div class="row thai-font" style="margin-left: 2em; font-size: 16px;">
           <div class="col-md-auto">
-            <label for="year">ปีการศึกษา </label>
-            <input type="text" id="year" placeholder="" name="year" class="form-control" style="width: 250px;">
+            <label for="year">ปีการศึกษา <span class="font-red"> *</span></label>
+            <input type="text" id="year" placeholder="" name="year" class="form-control" style="width: 250px;" required>
           </div>
           <div class="col-md-auto">
-            <label for="semestre">ภาคการศึกษา</label>
-            <input type="text" id="semestre" placeholder="" name="semestre" class="form-control" style="width: 250px;">
+            <label for="semestre">ภาคการศึกษา <span class="font-red"> *</span></label>
+            <input type="text" id="semestre" placeholder="" name="semestre" class="form-control" style="width: 250px;" required>
           </div>
         </div>
         <br>
         <div class="row thai-font" style="margin-left: 2em; font-size: 16px;">
           <div class="col-md-auto">
             <label for="department">ภาควิชา</label>
-            <select id="department" class="form-select" aria-label="Default select" style="width: 250px;" name="department">
+            <select id="department" class="form-select" aria-label="Default select" style="width: 250px;" name="department" required>
               <option selected="">โปรดเลือกภาควิชา</option>
               <option value="1">วิศวกรรมไฟฟ้าและคอมพิวเตอร์</option>
               <option value="2">วิศวกรรมอุตสาหการ</option>
               <option value="3">วิศวกรรมเครื่องกล</option>
               <option value="4">วิศวกรรมโยธา</option>
               <option value="5">วิศวกรรมเคมี</option>
+              <option value="6">อื่น ๆ</option>
             </select>
           </div>
           <div class="col-md-auto">
             <label for="course">โครงการ / หลักสูตร</label>
-            <select id= "course" class="form-select" aria-label="Default select" style="width: 250px;" name="course">
+            <select id= "course" class="form-select" aria-label="Default select" style="width: 250px;" name="course" required>
               <option selected="">โปรดเลือกโครงการ / หลักสูตร</option>
               <option value="1">TEP/TEPE</option>
               <option value="2">TU-PINE</option>
               <option value="3">บัณฑิตศึกษา</option>
               <option value="4">วิศวกรรมทางการแพทย์</option>
+              <option value="5">อื่น ๆ</option>
             </select>
           </div>
         </div>
         <br>
         <div class="row thai-font" style="margin-left: 2.7em; font-size: 16px;">
-            <label for="desc" style="margin-left: -0.7em;">หมายเหตุ </label>
+            <label for="desc" style="margin-left: -0.7em;">หมายเหตุ (แจ้งให้นักศึกษาทราบ)</label>
             <input type="text" id="desc" placeholder="" name="desc" class="form-control" style="width: 86%;">
         </div>
         <br>
         <div class="row thai-font" style="margin-left: 1em;">
           <div class="col-md-auto" style="margin: 1em;">
             <input type="file" id="file" name="file" class="baby-blue3" style="width: 350px;"/>
+            <div style="margin-top: 1em;">
+              <a href="#" class="font-black font-midnight-blue-h thai-font" download>คลิกเพื่อดาวน์โหลดตัวอย่างไฟล์ Excel</a>
+            </div>
           </div>
           <div class="col-md-auto" style="margin-top: 1em; margin: 1em;">
             <input type="submit" value="Submit"  class="btn-save"/>

@@ -47,11 +47,13 @@
       <div class="w3-container light-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
           <a href="{% url 'grade:show_grade' search_subject.id %}" class=" ul-rm font-black font-black-h">
             <p class="thai-font size-18" style="margin-top: 1em;">
-              {{search_subject.subject_id}} - SECTION {{search_subject.section}} &emsp;ปีการศึกษาที่ {{search_subject.semestre}}/{{search_subject.year}}
+              {{search_subject.subject_id}} - {{search_subject.section}} &emsp;ปีการศึกษาที่ {{search_subject.semestre}}/{{search_subject.year}}
             </p>
+            <p id="desc" class="thai-font size-15">หมายเหตุ: {{search_subject.desc}}</p>
           </a>
       </div>
     </div>
+    <br>
     {% endfor %}
     {% endif %}
     <!-- -->
@@ -63,7 +65,7 @@
       <p class="size-17" style="margin-bottom: -0.5em;">
         <a href="{% url 'grade:show_grade' grade_table.id %}" class=" ul-rm font-black font-black-h thai-font ">
           <i class="fa fa-book font-midnight-blue-h" style="font-size: 16px; margin-right: 1em;"></i>
-          <strong class="font-midnight-blue-h">{{grade_table.subject_id}} - SECTION {{grade_table.section}} &emsp;ปีการศึกษาที่ {{grade_table.semestre}}/{{grade_table.year}}</strong>
+          <strong class="font-midnight-blue-h">{{grade_table.subject_id}} - {{grade_table.section}} &emsp;ปีการศึกษาที่ {{grade_table.semestre}}/{{grade_table.year}}</strong>
         </a>
         <a href="{% url 'grade:show_grade' grade_table.id %}" class="btn-read pull-right ul-rm size-13 font-charcoal-h ">CLICK</a>
       </p>
