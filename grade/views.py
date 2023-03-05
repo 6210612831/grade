@@ -61,34 +61,6 @@ def login_view(request):
         return render(request, "grade/login.html")
 
 
-# Load grade data
-def get_grade_data(choice, request):
-    check_session(request)
-    output = []
-    grade_table_list = GradeTable.objects.filter(
-        user=request.session['user_id'])
-    for grade_table in grade_table_list:
-        header_list = []
-        table_name = grade_table.subject_id+'_'+grade_table.section+'_'+grade_table.year + \
-            '_'+grade_table.semestre+'_'+grade_table.course + \
-            '_'+request.session['user_id']
-        # get cloumn name
-        with connection.cursor() as cursor:
-            cursor.execute(
-                "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_NAME`=\'"+table_name+"\';")
-            products = cursor.fetchall()
-            # Column name to list
-            for column_name in products:
-                header_list.append(column_name[0])
-            # print(header_list)
-        with connection.cursor() as cursor:
-            cursor.execute(f"SELECT * FROM {table_name};")
-            products = cursor.fetchall()
-            output.append({'grade_list': products, 'header_list': header_list,
-                          'table_name': table_name, 'grade_table_id': grade_table.id})
-    return output
-
-
 # Manage_grade Page
 def manage_grade_view(request):
     try:
@@ -110,12 +82,12 @@ def manage_grade_view(request):
                 student_list = json.loads(data)
 
                 # Set table name
-                grade_table = subject_id+'_'+section+'_'+year+'_' + \
-                    semestre+'_'+course+'_'+request.session['user_id']
+                grade_table = subject_id.upper()+'_'+section+'_'+year+'_' + \
+                    semestre+'_'+course+'_'+department+'_'+request.session['user_id']
                 if len(GradeTable.objects.filter(grade_table=grade_table)) != 0:
                     return render(request, "grade/manage_grade.html", {'message': 'Table is already exist,Please delete old table'})
                 # Create GradeTable Object that store table's data
-                grade = GradeTable.objects.create(subject_id=subject_id, subject_name=subject_name, section=section, year=year, semestre=semestre,
+                grade = GradeTable.objects.create(subject_id=subject_id.upper(), subject_name=subject_name, section=section, year=year, semestre=semestre,
                                                   department=department, course=course, desc=desc, grade_table=grade_table, user=request.session['user_id'])
                 # Get header for create table field
                 create_table_sql = f"CREATE TABLE {grade_table} ("
@@ -123,7 +95,7 @@ def manage_grade_view(request):
                 for key in student_list[0]:
                     if create_table_sql[-1] != "(":
                         create_table_sql += ","
-                    create_table_sql += f"{key} varchar(255)"
+                    create_table_sql += f"{key.upper()} varchar(255)"
                     header.append(key)
                 # Create table
                 create_table_sql += ');'
@@ -131,7 +103,8 @@ def manage_grade_view(request):
                     with connection.cursor() as cursor:
                         cursor.execute(create_table_sql)
                 except Exception as e:
-                    return render(request, "grade/manage_grade.html", {'message': 'Exel File Error : {e} or (Maybe table is already exist)'})
+                    grade.delete()
+                    return render(request, "grade/manage_grade.html", {'message': f'Exel File Error : {e} or (Maybe table is already exist)'})
 
                 # Upload exel to table
                 for student in student_list:
@@ -140,7 +113,7 @@ def manage_grade_view(request):
                     for key in header:
                         if insert_data_sql[-1] != "(":
                             insert_data_sql += ","
-                        insert_data_sql += "\'"+str(student[key])+"\'"
+                        insert_data_sql += "\'"+str(student[key].upper() if (key == 'grade'or key == 'GRADE') else student[key])+"\'"
                     insert_data_sql += ');'
                     # Insert each row of student data
                     with connection.cursor() as cursor:
@@ -148,12 +121,13 @@ def manage_grade_view(request):
                 return HttpResponseRedirect(reverse("grade:courese_list"))
             # If upload file error
             except Exception as e:
-                output = get_grade_data(0, request)
-                return render(request, "grade/manage_grade.html", {'output': output, 'message': f'Exel File Error : {e}'})
+                with connection.cursor() as cursor:
+                    cursor.execute(f"DROP TABLE {grade.grade_table}")
+                grade.delete()
+                return render(request, "grade/manage_grade.html", { 'message': f'Exel File Error : {e}'})
         # Load data to manage_grade page
         else:
-            output = get_grade_data(0, request)
-            return render(request, "grade/manage_grade.html", {'output': output})
+            return render(request, "grade/manage_grade.html")
     # If cause Exception
     except Exception as e:
         return render(request, "grade/manage_grade.html", {'message': f'Error : {e}'})
@@ -276,9 +250,9 @@ def course_info(request, grade_table_id):
             grade_table = cursor.fetchall()
         with connection.cursor() as cursor:
             cursor.execute(
-                f"SELECT grade FROM {grade_table_data.grade_table} WHERE '1';")
+                f"SELECT GRADE FROM {grade_table_data.grade_table} WHERE '1';")
             grade_field = cursor.fetchall()
-            print(grade_field)
+            # print(grade_field)
         for grade in grade_field:
             if grade[0] == 'B+':
                 summary_grade['BB']+=1
