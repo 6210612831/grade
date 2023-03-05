@@ -24,9 +24,14 @@
     background-color: #f0f0f0;
   }
 </style>
-
+<title>ประกาศคะแนนสอบ</title>
 {% if grade_table.grade_list != "None" %}
 <div class="w3-col m9">
+    <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: 50px;"><br>
+      <h4 class="thai-font font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
+          วิชา 
+      </h4>
+    </div>
     <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
         <div class="w3-container white " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
             <div class="container">
@@ -48,9 +53,27 @@
 
             </div>
             <br>
+            <span class="thai-font size-15" style="float: right;">อัปเดตล่าสุด 2023-02-02 11:12:53.672180+00:00</span>
+            <i class="fa fa-refresh" style="font-size: 13px; margin-right: 1em; float: right; margin-top: 0.4em;"></i>
+            <br>
         </div>
     </div>
 </div>
+{% else %}
+  <div class="w3-col m9">
+    <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: 50px;"><br>
+      <h4 class="thai-font font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
+        วิชา
+      </h4>
+    </div>
+    <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
+      <div class="w3-container baby-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
+        <div class="size-18" style="margin-top: 1em; margin-left: 1em;">
+          <p class="thai-font">ไม่พบคะแนนของท่านในวิชานี้ หากมีข้อสงสัยโปรดติดต่ออาจารย์ประจำวิชา</p>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endif %}
 
 {% endblock %}
