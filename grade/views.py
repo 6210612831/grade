@@ -62,6 +62,7 @@ def login_view(request):
                 try:
                     int(username)
                     request.session['user_status'] = 0 # student
+                    # request.session['user_status'] = 1 # student Test
                 except:
                     request.session['user_status'] = 1 # instructor
                 request.session['user_id'] = username
