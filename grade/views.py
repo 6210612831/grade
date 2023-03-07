@@ -243,6 +243,7 @@ def course_info(request, grade_table_id):
         'F': 0,
         'W': 0,
     }
+    sum_grade = 0
     try:
         grade_table_data = GradeTable.objects.get(id=grade_table_id)
         header_list = []
@@ -274,6 +275,22 @@ def course_info(request, grade_table_id):
             else:
                 summary_grade[grade[0]] += 1
             student_num += 1
+            if grade[0] == 'A':
+                sum_grade += 4.0
+            elif grade[0] == 'B+':
+                sum_grade += 3.5
+            elif grade[0] == 'B':
+                sum_grade += 3.0
+            elif grade[0] == 'C+':
+                sum_grade += 2.5
+            elif grade[0] == 'C':
+                sum_grade += 2.0
+            elif grade[0] == 'D+':
+                sum_grade += 1.5
+            elif grade[0] == 'D':
+                sum_grade += 1.0
+            elif grade[0] == 'F':
+                sum_grade += 0.0
 
     except:
         pass
@@ -291,7 +308,7 @@ def course_info(request, grade_table_id):
                   'date':grade_table_data.desc,
                   }
         
-    return render(request, "grade/course_info.html", {'grade_table': output, 'summary_grade': summary_grade, 'student_num': student_num})
+    return render(request, "grade/course_info.html", {'grade_table': output, 'summary_grade': summary_grade, 'student_num': student_num, 'student_gpa': sum_grade/student_num})
 
 
 def search_subject_view(request):
