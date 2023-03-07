@@ -35,22 +35,21 @@
 {% if grade_table.grade_list != "None" %}
     <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
         <div class="w3-container white" style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
-            <p style="margin: 2em; margin-bottom: -0.5em;" class="size-18 thai-font">วิชา</p>
+            <p style="margin: 2em; margin-bottom: -0.5em;" class="size-18 thai-font">วิชา {{grade_table.subject_name}} - {{grade_table.subject_id}}</p>
             <div class="container">
-                subject_name : {{grade_table.subject_name}}<br>
-                subject_id : {{grade_table.subject_id}}<br>
-                description : {{grade_table.desc}}<br>
-                date : {{grade_table.date}}
+                <span class="thai-font size-15" style="float: right; margin-bottom: 1em;">อัปเดตล่าสุด {{grade_table.date}}</span>
+                <i class="fa fa-refresh" style="font-size: 13px; margin-right: 1em; float: right; margin-top: 0.4em; margin-left: 2em;"></i>
+                <p class="thai-font size-15" style="float: right;"> หมายเหตุ: {{grade_table.desc}}</p>
                 <table>
                     <tr>
                         {% for header in grade_table.header_list %}
-                        <th>{{ header }}</th>
+                        <th class="thai-font">{{ header }}</th>
                         {% endfor %}
                     </tr>
                     {% for grade in grade_table.grade_list %}
                     <tr>
                         {% for data in grade %}
-                            <td>{{ data }}</td>
+                            <td class="thai-font">{{ data }}</td>
                         {% endfor %}
                     </tr>
                     {% endfor %}
