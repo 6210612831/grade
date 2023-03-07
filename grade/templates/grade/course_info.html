@@ -37,6 +37,10 @@
         <div class="w3-container white" style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
             <p style="margin: 2em; margin-bottom: -0.5em;" class="size-18 thai-font">วิชา</p>
             <div class="container">
+                subject_name : {{grade_table.subject_name}}<br>
+                subject_id : {{grade_table.subject_id}}<br>
+                description : {{grade_table.desc}}<br>
+                date : {{grade_table.date}}
                 <table>
                     <tr>
                         {% for header in grade_table.header_list %}

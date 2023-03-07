@@ -25,6 +25,7 @@
   }
 </style>
 <title>ประกาศคะแนนสอบ</title>
+
 {% if grade_table.grade_list != "None" %}
 <div class="w3-col m9">
     <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: 50px;"><br>
@@ -35,6 +36,10 @@
     <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
         <div class="w3-container white " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
             <div class="container">
+              subject_name : {{grade_table.subject_name}}<br>
+              subject_id : {{grade_table.subject_id}}<br>
+              description : {{grade_table.desc}}<br>
+              date : {{grade_table.date}}
                 <table>
                     <tr>
                       {% for header in grade_table.header_list %}

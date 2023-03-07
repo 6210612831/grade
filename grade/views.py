@@ -97,7 +97,7 @@ def manage_grade_view(request):
                 for key in student_list[0]:
                     if create_table_sql[-1] != "(":
                         create_table_sql += ","
-                    create_table_sql += f"{key.upper()} varchar(255)"
+                    create_table_sql += f"`{key.upper()}` varchar(255)"
                     header.append(key)
                 # Create table
                 create_table_sql += ');'
@@ -105,6 +105,7 @@ def manage_grade_view(request):
                     with connection.cursor() as cursor:
                         cursor.execute(create_table_sql)
                 except Exception as e:
+                    grade.delete()
                     return render(request, "grade/manage_grade.html", {'message': f'Exel File Error : {e} or (Maybe table is already exist)'})
 
                 # Upload exel to table
@@ -202,8 +203,15 @@ def show_grade_view(request, grade_table_id):
         grade_table = "None"
         output = {'grade_list': grade_table}
     else:
-        output = {'grade_list': grade_table, 'header_list': header_list,
-                  'table_name': grade_table_data.grade_table, 'grade_table_id': grade_table_data.id}
+        output = {'grade_list': grade_table, 
+                  'header_list': header_list,
+                  'table_name': grade_table_data.grade_table, 
+                  'grade_table_id': grade_table_data.id,
+                  'subject_name':grade_table_data.subject_name,
+                  'subject_id':grade_table_data.subject_id,
+                  'desc':grade_table_data.created_at,
+                  'date':grade_table_data.desc,
+                  }
     return render(request, "grade/show_grade.html", {'grade_table': output})
 
 
@@ -273,8 +281,16 @@ def course_info(request, grade_table_id):
         grade_table = "None"
         output = {'grade_list': grade_table}
     else:
-        output = {'grade_list': grade_table, 'header_list': header_list,
-                  'table_name': grade_table_data.grade_table, 'grade_table_id': grade_table_data.id}
+        output = {'grade_list': grade_table, 
+                  'header_list': header_list,
+                  'table_name': grade_table_data.grade_table, 
+                  'grade_table_id': grade_table_data.id,
+                  'subject_name':grade_table_data.subject_name,
+                  'subject_id':grade_table_data.subject_id,
+                  'desc':grade_table_data.created_at,
+                  'date':grade_table_data.desc,
+                  }
+        
     return render(request, "grade/course_info.html", {'grade_table': output, 'summary_grade': summary_grade, 'student_num': student_num})
 
 
