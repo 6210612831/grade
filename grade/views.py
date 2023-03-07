@@ -33,7 +33,7 @@ def if_instructor(request):
         return True
     else:
         return False
-        
+
 
 def index(request):
     try:
@@ -61,10 +61,10 @@ def login_view(request):
             if response.status_code == status.HTTP_200_OK:
                 try:
                     int(username)
-                    request.session['user_status'] = 0 # student
-                    # request.session['user_status'] = 1 # student Test
+                    # request.session['user_status'] = 0  # student
+                    request.session['user_status'] = 1  # student Test
                 except:
-                    request.session['user_status'] = 1 # instructor
+                    request.session['user_status'] = 1  # instructor
                 request.session['user_id'] = username
                 request.session['login_status'] = username
                 request.session.modified = True
@@ -81,7 +81,7 @@ def manage_grade_view(request):
         return HttpResponseRedirect(reverse("grade:login"))
     if not if_instructor(request):
         return HttpResponseRedirect(reverse("grade:index"))
-    
+
     try:
         request.session['user_id']
         # Upload Excel file and create db to store data
@@ -102,7 +102,8 @@ def manage_grade_view(request):
 
                 # Set table name
                 grade_table = subject_id.upper()+'_'+section+'_'+year+'_' + \
-                    semestre+'_'+course+'_'+department+'_'+request.session['user_id']
+                    semestre+'_'+course+'_'+department + \
+                    '_'+request.session['user_id']
                 if len(GradeTable.objects.filter(grade_table=grade_table)) != 0:
                     return render(request, "grade/manage_grade.html", {'message': 'Table is already exist,Please delete old table'})
                 # Create GradeTable Object that store table's data
@@ -132,7 +133,9 @@ def manage_grade_view(request):
                     for key in header:
                         if insert_data_sql[-1] != "(":
                             insert_data_sql += ","
-                        insert_data_sql += "\'"+str(student[key].upper() if (key == 'grade'or key == 'GRADE') else student[key])+"\'"
+                        insert_data_sql += "\'" + \
+                            str(student[key].upper() if (
+                                key == 'grade' or key == 'GRADE') else student[key])+"\'"
                     insert_data_sql += ');'
                     # Insert each row of student data
                     with connection.cursor() as cursor:
@@ -143,7 +146,7 @@ def manage_grade_view(request):
                 with connection.cursor() as cursor:
                     cursor.execute(f"DROP TABLE {grade.grade_table}")
                 grade.delete()
-                return render(request, "grade/manage_grade.html", { 'message': f'Exel File Error : {e}'})
+                return render(request, "grade/manage_grade.html", {'message': f'Exel File Error : {e}'})
         # Load data to manage_grade page
         else:
             return render(request, "grade/manage_grade.html")
@@ -205,7 +208,7 @@ def logout_view(request):
 def show_grade_view(request, grade_table_id):
     if not if_session(request):
         return HttpResponseRedirect(reverse("grade:login"))
-    
+
     grade_table = ""
     try:
         grade_table_data = GradeTable.objects.get(id=grade_table_id)
@@ -230,14 +233,14 @@ def show_grade_view(request, grade_table_id):
         grade_table = "None"
         output = {'grade_list': grade_table}
     else:
-        output = {'grade_list': grade_table, 
+        output = {'grade_list': grade_table,
                   'header_list': header_list,
-                  'table_name': grade_table_data.grade_table, 
+                  'table_name': grade_table_data.grade_table,
                   'grade_table_id': grade_table_data.id,
-                  'subject_name':grade_table_data.subject_name,
-                  'subject_id':grade_table_data.subject_id,
-                  'desc':grade_table_data.created_at,
-                  'date':grade_table_data.desc,
+                  'subject_name': grade_table_data.subject_name,
+                  'subject_id': grade_table_data.subject_id,
+                  'desc': grade_table_data.desc,
+                  'date': grade_table_data.created_at,
                   }
     return render(request, "grade/show_grade.html", {'grade_table': output})
 
@@ -277,6 +280,7 @@ def course_info(request, grade_table_id):
         'W': 0,
     }
     sum_grade = 0
+    student_gpa = 0
     try:
         grade_table_data = GradeTable.objects.get(id=grade_table_id)
         header_list = []
@@ -324,6 +328,8 @@ def course_info(request, grade_table_id):
                 sum_grade += 1.0
             elif grade[0] == 'F':
                 sum_grade += 0.0
+            student_gpa = sum_grade/student_num
+            student_gpa = "{:.2f}".format(student_gpa)
 
     except:
         pass
@@ -331,17 +337,17 @@ def course_info(request, grade_table_id):
         grade_table = "None"
         output = {'grade_list': grade_table}
     else:
-        output = {'grade_list': grade_table, 
+        output = {'grade_list': grade_table,
                   'header_list': header_list,
-                  'table_name': grade_table_data.grade_table, 
+                  'table_name': grade_table_data.grade_table,
                   'grade_table_id': grade_table_data.id,
-                  'subject_name':grade_table_data.subject_name,
-                  'subject_id':grade_table_data.subject_id,
-                  'desc':grade_table_data.created_at,
-                  'date':grade_table_data.desc,
+                  'subject_name': grade_table_data.subject_name,
+                  'subject_id': grade_table_data.subject_id,
+                  'desc': grade_table_data.desc,
+                  'date': grade_table_data.created_at,
                   }
-        
-    return render(request, "grade/course_info.html", {'grade_table': output, 'summary_grade': summary_grade, 'student_num': student_num, 'student_gpa': sum_grade/student_num})
+
+    return render(request, "grade/course_info.html", {'grade_table': output, 'summary_grade': summary_grade, 'student_num': student_num, 'student_gpa': student_gpa})
 
 
 def search_subject_view(request):
