@@ -20,12 +20,20 @@ HOST = "https://restapi.engr.tu.ac.th"
 # Create your views here.
 
 
-def check_session(request):
+def if_session(request):
     try:
         request.session['user_id']
+        return True
     except:
-        return HttpResponseRedirect(reverse("grade:login"))
+        return False
 
+
+def if_instructor(request):
+    if request.session['user_status'] == 1:
+        return True
+    else:
+        return False
+        
 
 def index(request):
     try:
@@ -49,11 +57,14 @@ def login_view(request):
                 'password': password
             }
             response = requests.post(
-                HOST+' ', data=data)
+                HOST+'/api/v1/authentication/', data=data)
             if response.status_code == status.HTTP_200_OK:
+                try:
+                    int(username)
+                    request.session['user_status'] = 0 # student
+                except:
+                    request.session['user_status'] = 1 # instructor
                 request.session['user_id'] = username
-                # print(request.session['user_id'])
-                # print("render policy page")
                 request.session['login_status'] = username
                 request.session.modified = True
                 # return render(request, "web/policy.html")
@@ -65,6 +76,11 @@ def login_view(request):
 
 # Manage_grade Page
 def manage_grade_view(request):
+    if not if_session(request):
+        return HttpResponseRedirect(reverse("grade:login"))
+    if not if_instructor(request):
+        return HttpResponseRedirect(reverse("grade:index"))
+    
     try:
         request.session['user_id']
         # Upload Excel file and create db to store data
@@ -136,7 +152,11 @@ def manage_grade_view(request):
 
 
 def delete_table_view(request, grade_table_id):
-    check_session(request)
+    if not if_session(request):
+        return HttpResponseRedirect(reverse("grade:login"))
+    if not if_instructor(request):
+        return HttpResponseRedirect(reverse("grade:index"))
+
     try:
         grade_table = GradeTable.objects.get(
             id=grade_table_id, user=request.session['user_id'])
@@ -155,7 +175,8 @@ def delete_table_view(request, grade_table_id):
 
 # Grade Page
 def grade_view(request):
-    check_session(request)
+    if not if_session(request):
+        return HttpResponseRedirect(reverse("grade:login"))
     try:
         request.session['user_id']
         # subject = 'cn203'
@@ -166,7 +187,10 @@ def grade_view(request):
 
 
 def courese_list(request):
-    check_session(request)
+    if not if_session(request):
+        return HttpResponseRedirect(reverse("grade:login"))
+    if not if_instructor(request):
+        return HttpResponseRedirect(reverse("grade:index"))
     grade_table_list = GradeTable.objects.filter(
         user=request.session['user_id'])
     return render(request, "grade/courese_list.html", {'grade_table_list': grade_table_list})
@@ -178,7 +202,9 @@ def logout_view(request):
 
 
 def show_grade_view(request, grade_table_id):
-    check_session(request)
+    if not if_session(request):
+        return HttpResponseRedirect(reverse("grade:login"))
+    
     grade_table = ""
     try:
         grade_table_data = GradeTable.objects.get(id=grade_table_id)
@@ -216,7 +242,10 @@ def show_grade_view(request, grade_table_id):
 
 
 def change_status_view(request, grade_table_id):
-    check_session(request)
+    if not if_session(request):
+        return HttpResponseRedirect(reverse("grade:login"))
+    if not if_instructor(request):
+        return HttpResponseRedirect(reverse("grade:index"))
     try:
         grade_table = GradeTable.objects.get(
             id=grade_table_id, user=request.session['user_id'])
@@ -228,7 +257,10 @@ def change_status_view(request, grade_table_id):
 
 
 def course_info(request, grade_table_id):
-    check_session(request)
+    if not if_session(request):
+        return HttpResponseRedirect(reverse("grade:login"))
+    if not if_instructor(request):
+        return HttpResponseRedirect(reverse("grade:index"))
 
     grade_table = ""
     student_num = 0
@@ -312,7 +344,8 @@ def course_info(request, grade_table_id):
 
 
 def search_subject_view(request):
-    check_session(request)
+    if not if_session(request):
+        return HttpResponseRedirect(reverse("grade:login"))
     search_subject_list = []
     if request.method == 'POST':
         search_subject_key = request.POST["search_subject_key"]
