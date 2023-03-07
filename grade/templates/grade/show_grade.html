@@ -29,17 +29,13 @@
 {% if grade_table.grade_list != "None" %}
 <div class="w3-col m9">
     <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: 50px;"><br>
-      <h4 class="thai-font font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
-          วิชา 
+      <h4 class="thai-font font-black" style="margin-top: -0.4em;margin-left: 0.5em; ">
+          วิชา {{grade_table.subject_name}} - {{grade_table.subject_id}}
       </h4>
     </div>
     <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
         <div class="w3-container white " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
             <div class="container">
-              subject_name : {{grade_table.subject_name}}<br>
-              subject_id : {{grade_table.subject_id}}<br>
-              description : {{grade_table.desc}}<br>
-              date : {{grade_table.date}}
                 <table>
                     <tr>
                       {% for header in grade_table.header_list %}
@@ -58,8 +54,8 @@
 
             </div>
             <br>
-            <p class="thai-font size-15"> หมายเหตุ: </p>
-            <span class="thai-font size-15" style="float: right;">อัปเดตล่าสุด 2023-02-02 11:12:53.672180+00:00</span>
+            <p class="thai-font size-15"> หมายเหตุ: {{grade_table.desc}}</p>
+            <span class="thai-font size-15" style="float: right;">อัปเดตล่าสุด {{grade_table.date}}</span>
             <i class="fa fa-refresh" style="font-size: 13px; margin-right: 1em; float: right; margin-top: 0.4em;"></i>
             <br>
         </div>
@@ -67,11 +63,6 @@
 </div>
 {% else %}
   <div class="w3-col m9">
-    <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: 50px;"><br>
-      <h4 class="thai-font font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
-        วิชา
-      </h4>
-    </div>
     <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
       <div class="w3-container baby-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
         <div class="size-18" style="margin-top: 1em; margin-left: 1em;">
