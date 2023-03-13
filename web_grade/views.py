@@ -132,30 +132,33 @@ def manage_grade_view(request):
                     return render(request, "web_grade/manage_grade.html", {'message': f'Exel File Error : {e} or (Maybe table is already exist)'})
 
                 # Upload exel to table
-                for student in student_list:
-                    # Get header for create table field
-                    insert_data_sql = f"INSERT INTO {grade_table} VALUES ("
-                    for key in header:
-                        if insert_data_sql[-1] != "(":
-                            insert_data_sql += ","
-                        if (key == 'grade' or key == 'GRADE'):
-                            insert_data_sql += "\'" + str(student[key].upper())+"\'"
-                        elif (key == 'std_id' or key == 'STD_ID'):
-                            if len(str(student[key])) != 10:
-                                
-                                with connection.cursor() as cursor:
-                                    cursor.execute(f"DROP TABLE {grade.grade_table}")
-                                grade.delete()
-                                return render(request, "web_grade/manage_grade.html", {'message': f'Exel File Error : ฟิลด์ STD_ID ต้องมีเลขนักศึกษา 10 ตัว'})
-                        else:
-                             insert_data_sql += "\'" + str(student[key])+"\'"
-                        insert_data_sql += "\'" + \
-                            str(student[key].upper() if (key == 'grade' or key == 'GRADE') else student[key])+"\'"
-                        
-                    insert_data_sql += ');'
-                    # Insert each row of student data
+                try:
+                    for student in student_list:
+                        created_grade = grade
+                        # Get header for create table field
+                        insert_data_sql = f"INSERT INTO {grade_table} VALUES ("
+                        for key in header:
+                            if insert_data_sql[-1] != "(":
+                                insert_data_sql += ","
+                            if (key == 'grade' or key == 'GRADE'):
+                                insert_data_sql += "\'" + str(student[key]).upper()+"\'"
+                            elif (key == 'std_id' or key == 'STD_ID'):
+                                if len(str(student[key])) != 10:
+                                    raise Exception("ฟิลด์ STD_ID ต้องมีเลขนักศึกษา 10 ตัว")
+                                else:
+                                    insert_data_sql += "\'" + str(student[key])+"\'"
+                            else:
+                                insert_data_sql += "\'" + str(student[key])+"\'"
+                            
+                        insert_data_sql += ');'
+                        # Insert each row of student data
+                        with connection.cursor() as cursor:
+                            cursor.execute(insert_data_sql)
+                except Exception as e:
                     with connection.cursor() as cursor:
-                        cursor.execute(insert_data_sql)
+                        cursor.execute(f"DROP TABLE {created_grade.grade_table}")
+                        created_grade.delete()
+                    return render(request, "web_grade/manage_grade.html", {'message': f'Exel File Error E : {e}'})
                 return HttpResponseRedirect(reverse("web_grade:courese_list"))
             # If upload file error
             except Exception as e:
@@ -203,7 +206,6 @@ def grade_view(request):
         grade_table_list = GradeTable.objects.filter(status=True)
         return render(request, "web_grade/grade.html", {'grade_table_list': grade_table_list})
     except Exception as e:
-        print(e)
         return HttpResponseRedirect(reverse("web_grade:login"))
 
 
