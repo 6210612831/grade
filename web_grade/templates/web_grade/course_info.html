@@ -44,7 +44,11 @@
                 <table>
                     <tr>
                         {% for header in grade_table.header_list %}
+                        {% if header == 'STD_ID' %}
+                        <th class="thai-font">เลขทะเบียน</th>
+                        {% else %}
                         <th class="thai-font">{{ header }}</th>
+                        {% endif %}
                         {% endfor %}
                     </tr>
                     {% for grade in grade_table.grade_list %}
@@ -106,6 +110,22 @@
                                 <tr>
                                     <td>W</td>
                                     <td>{{summary_grade.W}}</td>
+                                </tr>
+                                <tr>
+                                    <td>ขส</td>
+                                    <td>{{summary_grade.ขส}}</td>
+                                </tr>
+                                <tr>
+                                    <td>I</td>
+                                    <td>{{summary_grade.I}}</td>
+                                </tr>
+                                <tr>
+                                    <td>S</td>
+                                    <td>{{summary_grade.S}}</td>
+                                </tr>
+                                <tr>
+                                    <td>U</td>
+                                    <td>{{summary_grade.U}}</td>
                                 </tr>
                             </table>
                         </div>
