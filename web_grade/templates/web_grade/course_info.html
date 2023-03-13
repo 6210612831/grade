@@ -34,11 +34,13 @@
 {% if grade_table.grade_list != "None" %}
     <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
         <div class="w3-container white" style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
-            <p style="margin: 2em; margin-bottom: -0.5em;" class="size-18 thai-font">วิชา {{grade_table.subject_name}} - {{grade_table.subject_id}}</p>
-            <div class="container">
-                <span class="thai-font size-15" style="float: right; margin-bottom: 1em;">อัปเดตล่าสุด {{grade_table.date}}</span>
-                <i class="fa fa-refresh" style="font-size: 13px; margin-right: 1em; float: right; margin-top: 0.4em; margin-left: 2em;"></i>
-                <p class="thai-font size-15" style="float: right;"> หมายเหตุ: {{grade_table.desc}}</p>
+            <p style="margin: 2em; margin-bottom: -0.5em;" class="size-18 thai-font">{{grade_table.subject_id}} {{grade_table.subject_name}}</p>
+            <br>
+            <span class="thai-font size-15" style="float: right;">อัปเดตล่าสุด {{grade_table.date}}</span>
+            <i class="fa fa-refresh" style="font-size: 12px; margin-right: 0.4em; float: right; margin-top: 0.5em; margin-left: 2em;"></i>
+            <br>
+            <p class="thai-font size-15" style="float: right; margin-top: 1em;"> หมายเหตุ: {{grade_table.desc}}</p>
+            <div class="container" style="overflow-x:auto;">
                 <table>
                     <tr>
                         {% for header in grade_table.header_list %}
@@ -127,7 +129,7 @@
         </div>
     {% endif %}
     <br>
-    <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: 50px;"><br>
+    <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: auto;"><br>
     <h4 class="thai-font font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
         ตัวอย่าง การแสดงผลการประกาศคะแนนของนักศึกษา
     </h4>
@@ -137,7 +139,7 @@
             <h4 class="thai-font font-black" style="margin-top: 1em; margin-left: 0.5em; ">
                 วิชา {{grade_table.subject_name}} - {{grade_table.subject_id}}
             </h4>
-            <div class="container">
+            <div class="container" style="overflow-x:auto;">
                 <table>
                     <tr>
                         {% for header in grade_table.header_list%}
