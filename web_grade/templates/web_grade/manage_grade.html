@@ -1,0 +1,176 @@
+{% extends "web_grade/layout.html" %}
+{% load my_tags %}
+
+{% block body %}
+<style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 95.5%;
+    margin-top: 0.5em;
+    margin-left: 1.25em;
+  }
+
+  td,
+  th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding-left: 1em;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f0f0f0;
+  }
+  hr{
+    margin-left: 3em;
+  }
+  input[type=file]::file-selector-button {
+    background-color: #AFD8F2;
+    color: black;
+    width: 150px;
+    height: 35px;
+    transition-duration: 0.4s;
+    border-radius: 5px;
+    border: none;
+    text-align: center;
+    margin-right: 1.5em;
+}
+
+  input[type=file]::file-selector-button:hover {
+    background-color: #385e96ad;
+    color: white;
+    width: 150px;
+    height: 35px;
+    transition-duration: 0.4s;
+    border-radius: 5px;
+    text-align: center;
+    border: 2px, black;
+  }
+</style>
+<script language="javascript">
+function confirm_delete()
+    {
+        var answer = window.confirm("ยืนยันการลบ");
+        return answer;
+    }
+if('{{message}}' != ""){
+  alert('{{message}}');
+}
+
+</script>
+<title>อัปโหลดคะแนนสอบ</title>
+<div class="w3-col m9">
+    <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: 50px;"><br>
+      <h4 class="thai-font font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
+        อัปโหลดคะแนนสอบ <i class="fa fa-plus" style="font-size: 18px; margin-left: 0.5em;"></i>
+      </h4>
+    </div>
+  <!-- <form method="post" action="{% url 'web_grade:manage_grade' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <a href="#" class="font-midnight-blue-h ">
+      <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: 80px;"><br>
+        <div class="w3-container light-green" style="margin-left: 0.5em; margin-top: -1.5em; height: 80px;">
+          <br>
+          <input type="file" id="file" name="file" />
+          <input type="submit" value="Upload" />
+        </div>
+      </div>
+    </a>
+  </form> -->
+  <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
+    <div class="w3-container light-green" style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
+      <form method="post" action="{% url 'web_grade:manage_grade' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row thai-font" style="margin-left: 2em; font-size: 16px; margin-top: 2em;">
+          <div class="col-md-auto">
+            <label for="sid" >รหัสวิชา<span class="font-red"> *</span></label>
+            <input type="text" id="sid" name="sid" class="form-control" style="width: 250px;" required>
+          </div>
+          <div class="col-md-auto">
+            <label for="sname">ชื่อวิชา<span class="font-red"> *</span></label>
+          <input type="text" id="sname" name="sname" class="form-control" style="width: 250px;" required>
+          </div>
+          <div class="col-md-auto">
+            <label for="section">SECTION<span class="font-red"> *</span></label>
+            <input type="text" id="section" name="section" class="form-control" style="width: 250px;" required>
+          </div>
+        </div>
+        <br>
+        <div class="row thai-font" style="margin-left: 2em; font-size: 16px;">
+          <div class="col-md-auto">
+            <label for="year">ปีการศึกษา <span class="font-red"> *</span></label>
+            <input type="text" id="year" name="year" class="form-control" style="width: 250px;" required>
+          </div>
+          <div class="col-md-auto">
+            <label for="semestre">ภาคการศึกษา <span class="font-red"> *</span></label>
+            <input type="text" id="semestre" name="semestre" class="form-control" style="width: 250px;" required>
+          </div>
+        </div>
+        <br>
+        <div class="row thai-font" style="margin-left: 2em; font-size: 16px;">
+          <div class="col-md-auto">
+            <label for="department">ภาควิชา <span class="font-red"> *</span></label>
+            <select id="department" class="form-select" aria-label="Default select" style="width: 250px;" name="department" required>
+              <option selected value="0">โปรดเลือกภาควิชา</option>
+              <option value="1">วิศวกรรมไฟฟ้าและคอมพิวเตอร์</option>
+              <option value="2">วิศวกรรมอุตสาหการ</option>
+              <option value="3">วิศวกรรมเครื่องกล</option>
+              <option value="4">วิศวกรรมโยธา</option>
+              <option value="5">วิศวกรรมเคมี</option>
+              <option value="6">อื่น ๆ</option>
+            </select>
+          </div>
+          <div class="col-md-auto">
+            <label for="course">โครงการ / หลักสูตร <span class="font-red"> *</span></label>
+            <select id= "course" class="form-select" aria-label="Default select" style="width: 250px;" name="course" required>
+              <option selected value="0">โปรดเลือกโครงการ / หลักสูตร</option>
+              <option value="1">TEP/TEPE</option>
+              <option value="2">TU-PINE</option>
+              <option value="3">บัณฑิตศึกษา</option>
+              <option value="4">วิศวกรรมทางการแพทย์</option>
+              <option value="5">อื่น ๆ</option>
+            </select>
+          </div>
+        </div>
+        <br>
+        <div class="row thai-font" style="margin-left: 2.7em; font-size: 16px;">
+            <label for="desc" style="margin-left: -0.7em;">หมายเหตุ (แจ้งให้นักศึกษาทราบ)</label>
+            <input type="text" id="desc" name="desc" class="form-control" style="width: 86%;">
+        </div>
+        <br>
+        <div class="row thai-font" style="margin-left: 1em;">
+          <div class="col-md-auto" style="margin: 1em;">
+            <input type="file" id="file" name="file" class="baby-blue3" style="width: 350px;"/>
+            <div style="margin-top: 1em;">
+              <a href="https://docs.google.com/spreadsheets/d/1c60qv2bLh7oIO2fRWw0BKBWauvChDk4v/edit?usp=sharing&ouid=117846335850529004915&rtpof=true&sd=true" class="font-black font-midnight-blue-h thai-font" target="_blank" rel="noopener noreferrer">คลิกเพื่อดาวน์โหลดตัวอย่างไฟล์ Excel</a>
+            </div>
+          </div>
+          <div class="col-md-auto" style="margin-top: 1em; margin: 1em;">
+            <input type="submit" value="Submit"  class="btn-save"/>
+          </div>
+        </div>
+        <br>
+      </form>
+    </div>
+  </div>
+  
+  <hr class="w3-col m11">
+  </div>
+  <script>
+    var date = new Date()
+    var year_century = date.getFullYear()
+    var year = year_century + 543
+    var mounth = date.getMonth() + 1
+    if(mounth >=1 && mounth < 8){
+      year -= 1;
+      document.getElementById("semestre").value = 2;
+    }
+    else{
+      document.getElementById("semestre").value = 1;
+    }
+    document.getElementById("year").value = year;
+  </script>
+{% endblock %}
+

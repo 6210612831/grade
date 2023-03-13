@@ -1,0 +1,93 @@
+{% extends "web_grade/layout.html" %}
+{% load my_tags %}
+
+{% block body %}
+<style>
+</style>
+<script language="javascript">
+    if('{{message}}' != ""){
+    alert('{{message}}');
+    }
+    function confirm_delete() {
+            var answer = window.confirm("ยืนยันการลบ");
+            return answer;
+        }
+</script>
+<title>รายวิชาที่ประกาศคะแนนแล้ว</title>
+<div class="w3-col m9">
+    <div class="w3-margin w3-container w3-card w3-white w3-round w3-margin" style="height: 50px;"><br>
+        <h4 class="thai-font font-black" style="margin-top: -0.4em;margin-left: 0.5em;">
+            รายวิชาที่ประกาศคะแนนแล้ว <i class="fa fa-bar-chart" style="font-size: 18px; margin-left: 0.5em;"></i>
+        </h4>
+    </div>
+</div>
+
+<div style="height: auto;" class="w3-col m9">
+    {% for grade_table in grade_table_list%}
+        <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h" style="height: auto;"><br>
+            <div class="w3-container light-green " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
+                <br>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-2 thai-font" style="font-size: 16px;">
+                            รหัสวิชา:<br>
+                            ชื่อวิชา:<br>
+                            SECTION:<br>
+                            ปีการศึกษา:<br>
+                        </div>
+                        <div class="col thai-font" style="font-size: 16px;">
+                            {{grade_table.subject_id}}<br>
+                            {{grade_table.subject_name}}<br>
+                            {{grade_table.section}}<br>
+                            {{grade_table.year}}<br>
+                        </div>
+                    </div>
+                </div>
+                <div class="container" style="margin-top: 1em;">
+                    <div class="row">
+                        <div class="col-md-2 thai-font" style="margin-top: 1.5em;">
+                            สถานะ:
+                            <!-- <span style="margin-left: 1em; " class="font-red">
+                                    ไม่แสดง
+                                </span> -->
+                            {% if grade_table.status == 0%}
+                            <span style="margin-left: 1em; " class="font-red">
+                                ไม่แสดง
+                            </span>
+                            {% else %}
+                            <span style="margin-left: 1em; " class="font-green">
+                                แสดง
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-2 thai-font" style="margin-top: 1em;">
+                            <button class="btn-change">
+                                <a href="{% url 'web_grade:change_status' grade_table.id %}" class="ul-rm font-black-h">
+                                    <p class="thai-font " style="margin-top:0.3em">เปลี่ยนสถานะ</p>
+                                </a>
+                            </button>
+                        </div>
+                        <div class="col-md-2 thai-font" style="margin-top: 1em;">
+                            <button class="btn-save ">
+                                <a href="{% url 'web_grade:course_info' grade_table.id %}" class="ul-rm font-white-h">
+                                    <p class="thai-font " style="margin-top:0.3em">รายละเอียด</p>
+                                </a>
+                            </button>
+                        </div>
+                        <div class="col thai-font">
+                            <button class="btn-dagr">
+                                <a href="{% url 'web_grade:delete_table' grade_table.id %}" class="ul-rm font-black-h"
+                                    onclick="return confirm_delete()">
+                                    <p class="thai-font" style="margin-top:0.3em">ลบ</p>
+                                </a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
