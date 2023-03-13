@@ -112,6 +112,11 @@ def manage_grade_view(request):
                 # Get header for create table field
                 create_table_sql = f"CREATE TABLE {grade_table} ("
                 header = []
+                try:
+                    student_list[0]['std_id']
+                except:
+                    grade.delete()
+                    return render(request, "web_grade/manage_grade.html", {'message': "Table ต้องมีฟิลด์ std_id"})
                 for key in student_list[0]:
                     if create_table_sql[-1] != "(":
                         create_table_sql += ","
@@ -133,9 +138,20 @@ def manage_grade_view(request):
                     for key in header:
                         if insert_data_sql[-1] != "(":
                             insert_data_sql += ","
+                        if (key == 'grade' or key == 'GRADE'):
+                            insert_data_sql += "\'" + str(student[key].upper())+"\'"
+                        elif (key == 'std_id' or key == 'STD_ID'):
+                            if len(str(student[key])) != 10:
+                                
+                                with connection.cursor() as cursor:
+                                    cursor.execute(f"DROP TABLE {grade.grade_table}")
+                                grade.delete()
+                                return render(request, "web_grade/manage_grade.html", {'message': f'Exel File Error : ฟิลด์ STD_ID ต้องมีเลขนักศึกษา 10 ตัว'})
+                        else:
+                             insert_data_sql += "\'" + str(student[key])+"\'"
                         insert_data_sql += "\'" + \
-                            str(student[key].upper() if (
-                                key == 'grade' or key == 'GRADE') else student[key])+"\'"
+                            str(student[key].upper() if (key == 'grade' or key == 'GRADE') else student[key])+"\'"
+                        
                     insert_data_sql += ');'
                     # Insert each row of student data
                     with connection.cursor() as cursor:
@@ -186,7 +202,8 @@ def grade_view(request):
         # subject = 'cn203'
         grade_table_list = GradeTable.objects.filter(status=True)
         return render(request, "web_grade/grade.html", {'grade_table_list': grade_table_list})
-    except:
+    except Exception as e:
+        print(e)
         return HttpResponseRedirect(reverse("web_grade:login"))
 
 
@@ -278,6 +295,10 @@ def course_info(request, grade_table_id):
         'D': 0,
         'F': 0,
         'W': 0,
+        'I':0,
+        'ขส':0,
+        'S':0,
+        'U':0,
     }
     sum_grade = 0
     student_gpa = 0

@@ -1,5 +1,4 @@
 {% extends "web_grade/layout.html" %}
-{% load my_tags %}
 
 {% block body %}
   <title>ประกาศคะแนนสอบ</title>
@@ -77,24 +76,6 @@
     </div>
     <!-- end document -->
       
-    {% for table in output%}
-    <table>
-      <tr>
-        {% for header in table.header_list %}
-        <th>{{ header }}</th>
-        {% endfor %}
-      </tr>
-      {% for grade in table.grade_list %}
-      <tr>
-        {% for header in table.header_list %}
-        <td>{{ grade|load_grade:header }}</td>
-        {% endfor %}
-    
-      </tr>
-      {% endfor %}
-    </table>
-    <hr>
-    {% endfor %}
 
   </div>
 <script>
@@ -102,34 +83,4 @@
 </script>
 {% endblock %}
 
-    <!-- End Grid -->
-    <!-- End Page Container -->
-  <!-- <script>
-    var value = document.getElementById("user_id").innerHTML
-    console.log(value);
-  
-    fetch('http://127.0.0.1:8000/api/v1/student?std_code=' + value, {
-      headers: {
-        'Application-Key': 'rootroot'
-      }
-    })
-      .then(res => {
-        return res.json();
-      })
-      .then(data => {
-        console.log(data)
-        const title_th = data['output'][0]['tittle_name_lth']
-        const fname_th = data['output'][0]['fname_th'];
-        const lname_th = data['output'][0]['lname_th'];
-        const major_th = data['output'][0]['major_th'];
-        const department_th = data['output'][0]['department_th'];
-        const email = data['output'][0]['email'];
-        document.querySelector('#title').insertAdjacentHTML('beforeend', title_th);
-        document.querySelector('#firstname').insertAdjacentHTML('beforeend', fname_th);
-        document.querySelector('#lastname').insertAdjacentHTML('beforeend', lname_th);
-        document.querySelector('#major').insertAdjacentHTML('beforeend', major_th);
-        document.querySelector('#email').insertAdjacentHTML('beforeend', email);
-        document.querySelector('#depart').insertAdjacentHTML('beforeend', department_th);
-      })
-      .catch(error => console.log(error));
-  </script> -->
+
