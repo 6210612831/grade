@@ -32,7 +32,8 @@
     </div>
     <!-- end serch -->
     <!-- ถ้ายังไม่มีการค้นหา -->
-    {% if not search_subject_list%}
+    {% if search_subject_list == 0 %}
+    {% elif not search_subject_list%}
     <div class="w3-row-padding w3-container w3-card w3-round w3-margin red box-shadow-h" style="height: 60px;"><br>
       <p class="thai-font size-15 font-white" style="margin-left: 0.5em;">
         ไม่พบข้อมูลที่ท่านค้นหา
@@ -57,21 +58,26 @@
     <!-- -->
     <!-- ประกาศ -->
     <div class="w3-container w3-card w3-white w3-round w3-margin scroller"><br>
-      <h4 class="thai-font" style="margin-left: 0.5em;">รายวิชาที่ประกาศคะแนนแล้ว &emsp13;&#128204;</h4>
+      <h4 class="thai-font" style="margin-left: 0.5em;">รายวิชาที่ประกาศคะแนนแล้วทั้งหมด &emsp13;&#128204;</h4>
       <hr class="w3-clear">
+      {% if not grade_table_list %}
+      <p class="thai-font size-17" style="margin-left: 0.5em;">- ยังไม่มีรายวิชาที่ประกาศคะแนนแล้ว - </p>
+      {% else %}
+      
       {% for grade_table in grade_table_list%}
       <p class="size-17" style="margin-bottom: -0.5em;">
         <a href="{% url 'web_grade:show_grade' grade_table.id %}" class=" ul-rm font-black font-black-h thai-font ">
           <i class="fa fa-book font-midnight-blue-h" style="font-size: 16px; margin-right: 1em;"></i>
           <strong class="font-midnight-blue-h">{{grade_table.subject_id}} - {{grade_table.section}} &emsp;ปีการศึกษาที่ {{grade_table.semestre}}/{{grade_table.year}}</strong>
         </a>
-        <a href="{% url 'web_grade:show_grade' grade_table.id %}" class="btn-read pull-right ul-rm size-13 font-charcoal-h ">CLICK</a>
+        <a href="{% url 'web_grade:show_grade' grade_table.id %}" class="btn-read pull-right ul-rm size-13 font-charcoal-h " style="margin-top: 1em;">CLICK</a>
       </p>
+      <br>
       <br>
       <p id="desc" class="thai-font size-15" style="margin-left: 2.3em;">หมายเหตุ: {{grade_table.desc}}</p>
       <hr>
-
       {% endfor %}
+      {% endif %}
 
     </div>
     <!-- end document -->

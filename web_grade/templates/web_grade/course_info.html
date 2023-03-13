@@ -157,13 +157,17 @@
     <div class="w3-card w3-round w3-margin tiffany-green box-shadow-h " style="height: auto;"><br>
         <div class="w3-container white " style="margin-left: 0.5em; margin-top: -1.5em; height: auto;">
             <h4 class="thai-font font-black" style="margin-top: 1em; margin-left: 0.5em; ">
-                วิชา {{grade_table.subject_name}} - {{grade_table.subject_id}}
+                {{grade_table.subject_id}} {{grade_table.subject_name}}
             </h4>
             <div class="container" style="overflow-x:auto;">
                 <table>
                     <tr>
                         {% for header in grade_table.header_list%}
+                        {% if header == 'STD_ID' %}
+                        <th class="thai-font">เลขทะเบียน</th>
+                        {% else %}
                         <th class="thai-font">{{ header }}</th>
+                        {% endif %}
                         {% endfor %}
                     </tr>
                     {% for grade in grade_table.grade_list|slice:":1" %}

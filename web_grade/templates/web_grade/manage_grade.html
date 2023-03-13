@@ -84,15 +84,15 @@ if('{{message}}' != ""){
         <div class="row thai-font" style="margin-left: 2em; font-size: 16px; margin-top: 2em;">
           <div class="col-md-auto">
             <label for="sid" >รหัสวิชา<span class="font-red"> *</span></label>
-            <input type="text" id="sid" name="sid" class="form-control" style="width: 250px;" required>
+            <input type="text" id="sid" name="sid" class="form-control" style="width: 250px;" placeholder="CN101" required>
           </div>
           <div class="col-md-auto">
             <label for="sname">ชื่อวิชา<span class="font-red"> *</span></label>
-          <input type="text" id="sname" name="sname" class="form-control" style="width: 250px;" required>
+          <input type="text" id="sname" name="sname" class="form-control" style="width: 250px;" placeholder="Introductory Computer" required>
           </div>
           <div class="col-md-auto">
             <label for="section">SECTION<span class="font-red"> *</span></label>
-            <input type="text" id="section" name="section" class="form-control" style="width: 250px;" required>
+            <input type="text" id="section" name="section" class="form-control" style="width: 250px;" placeholder="810001" required>
           </div>
         </div>
         <br>
@@ -109,26 +109,18 @@ if('{{message}}' != ""){
         <br>
         <div class="row thai-font" style="margin-left: 2em; font-size: 16px;">
           <div class="col-md-auto">
-            <label for="department">ภาควิชา <span class="font-red"> *</span></label>
-            <select id="department" class="form-select" aria-label="Default select" style="width: 250px;" name="department" required>
-              <option selected value="0">โปรดเลือกภาควิชา</option>
+            <label for="department">ภาควิชา / โครงการ / หลักสูตร<span class="font-red"> *</span></label>
+            <select id="department" class="form-select" aria-label="Default select" style="max-width: 300px;" name="department" required>
+              <option selected value="0">กรุณาเลือก ภาควิชา / โครงการ / หลักสูตร</option>
               <option value="1">วิศวกรรมไฟฟ้าและคอมพิวเตอร์</option>
               <option value="2">วิศวกรรมอุตสาหการ</option>
               <option value="3">วิศวกรรมเครื่องกล</option>
               <option value="4">วิศวกรรมโยธา</option>
               <option value="5">วิศวกรรมเคมี</option>
-              <option value="6">อื่น ๆ</option>
-            </select>
-          </div>
-          <div class="col-md-auto">
-            <label for="course">โครงการ / หลักสูตร <span class="font-red"> *</span></label>
-            <select id= "course" class="form-select" aria-label="Default select" style="width: 250px;" name="course" required>
-              <option selected value="0">โปรดเลือกโครงการ / หลักสูตร</option>
-              <option value="1">TEP/TEPE</option>
-              <option value="2">TU-PINE</option>
-              <option value="3">บัณฑิตศึกษา</option>
-              <option value="4">วิศวกรรมทางการแพทย์</option>
-              <option value="5">อื่น ๆ</option>
+              <option value="6">TEP/TEPE</option>
+              <option value="7">TU-PINE</option>
+              <option value="8">บัณฑิตศึกษา</option>
+              <option value="9">วิศวกรรมทางการแพทย์</option>
             </select>
           </div>
         </div>
@@ -140,7 +132,7 @@ if('{{message}}' != ""){
         <br>
         <div class="row thai-font" style="margin-left: 1em;">
           <div class="col-md-auto" style="margin: 1em;">
-            <input type="file" id="file" name="file" class="baby-blue3" style="width: 350px;"/>
+            <input type="file" id="file" name="file" class="baby-blue3" style="max-width: 350px; width: auto;"/>
             <div style="margin-top: 1em;">
               <a href="https://docs.google.com/spreadsheets/d/1c60qv2bLh7oIO2fRWw0BKBWauvChDk4v/edit?usp=sharing&ouid=117846335850529004915&rtpof=true&sd=true" class="font-black font-midnight-blue-h thai-font" target="_blank" rel="noopener noreferrer">คลิกเพื่อดาวน์โหลดตัวอย่างไฟล์ Excel</a>
             </div>
