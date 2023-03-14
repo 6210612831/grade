@@ -8,7 +8,6 @@ class GradeTable(models.Model):
     year = models.CharField(max_length=4,blank=False, null=False)
     semestre = models.CharField(max_length=1,blank=False, null=False)
     department = models.CharField(max_length=100,blank=False, null=False)
-    course = models.CharField(max_length=100,blank=False, null=False)
     desc = models.CharField(max_length=255,blank=False, null=False)
     user = models.CharField(max_length=255,blank=False, null=False)
     grade_table = models.CharField(max_length=255,blank=False, null=False)

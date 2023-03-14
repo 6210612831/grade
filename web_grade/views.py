@@ -81,102 +81,100 @@ def manage_grade_view(request):
         return HttpResponseRedirect(reverse("web_grade:login"))
     if not if_instructor(request):
         return HttpResponseRedirect(reverse("web_grade:index"))
+    if request.method == 'POST':
+        try:
+            # Read exel file to json
+            subject_id = request.POST["sid"]  # รหัสวิชา
+            subject_name = request.POST["sname"]  # ชื่อวิชา
+            section = request.POST["section"]  # SECTION
+            year = request.POST["year"]  # ปีการศึกษา
+            semestre = request.POST["semestre"]  # ภาคการศึกษา
+            department = request.POST["department"]  # ภาควิชา / โครงการ / หลักสูตร
+            # course = request.POST["course"]  # โครงการ / หลักสูตร
+            desc = request.POST["desc"]  # หมายเหตุ
+            df = pd.read_excel(request.FILES['file'])
+            data = df.to_json(orient='records')
+            student_list = json.loads(data)
 
-    try:
-        request.session['user_id']
-        # Upload Excel file and create db to store data
-        if request.method == 'POST':
-            try:
-                # Read exel file to json
-                subject_id = request.POST["sid"]  # รหัสวิชา
-                subject_name = request.POST["sname"]  # ชื่อวิชา
-                section = request.POST["section"]  # SECTION
-                year = request.POST["year"]  # ปีการศึกษา
-                semestre = request.POST["semestre"]  # ภาคการศึกษา
-                department = request.POST["department"]  # ภาควิชา
-                course = request.POST["course"]  # โครงการ / หลักสูตร
-                desc = request.POST["desc"]  # หมายเหตุ
-                df = pd.read_excel(request.FILES['file'])
-                data = df.to_json(orient='records')
-                student_list = json.loads(data)
+        # If upload information error
+        except Exception as e:
+            return render(request, "web_grade/manage_grade.html", {'message': f'Information Error : กรอกข้อมูลไม่ครบ'})
 
-                # Set table name
-                grade_table = subject_id.upper()+'_'+section+'_'+year+'_' + \
-                    semestre+'_'+course+'_'+department + \
-                    '_'+request.session['user_id']
-                if len(GradeTable.objects.filter(grade_table=grade_table)) != 0:
-                    return render(request, "web_grade/manage_grade.html", {'message': 'Table is already exist,Please delete old table'})
-                # Create GradeTable Object that store table's data
-                grade = GradeTable.objects.create(subject_id=subject_id.upper(), subject_name=subject_name, section=section, year=year, semestre=semestre,
-                                                  department=department, course=course, desc=desc, grade_table=grade_table, user=request.session['user_id'])
+        # Set table name
+        grade_table = subject_id.upper()+'_'+section+'_'+year+'_' + \
+            semestre+'_'+department + \
+            '_'+request.session['user_id']
+        if len(GradeTable.objects.filter(grade_table=grade_table)) != 0:
+            return render(request, "web_grade/manage_grade.html", {'message': 'Table is already exist,Please delete old table'})
+        
+        # Create GradeTable Object that store table's data
+        grade = GradeTable.objects.create(subject_id=subject_id.upper(), subject_name=subject_name, section=section, year=year, semestre=semestre,
+                                            department=department, desc=desc, grade_table=grade_table, user=request.session['user_id'])
+        
+        # Get header for create table field
+        create_table_sql = f"CREATE TABLE {grade_table} ("
+        header = []
+
+        # Check std_id
+        try:
+            student_list[0]['std_id']
+        except:
+            grade.delete()
+            return render(request, "web_grade/manage_grade.html", {'message': "Table ต้องมีฟิลด์ std_id"})
+        
+        # Create table sql
+        for key in student_list[0]:
+            if create_table_sql[-1] != "(":
+                create_table_sql += ","
+            create_table_sql += f"`{key.upper()}` varchar(255)"
+            header.append(key)
+        create_table_sql += ');'
+
+        # Run Create table
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(create_table_sql)
+        except Exception as e:
+            grade.delete()
+            return render(request, "web_grade/manage_grade.html", {'message': f'Exel File Error : {e} or (Maybe table is already exist)'})
+
+        # Upload exel data to table
+        try:
+            for student in student_list:
                 # Get header for create table field
-                create_table_sql = f"CREATE TABLE {grade_table} ("
-                header = []
-                try:
-                    student_list[0]['std_id']
-                except:
-                    grade.delete()
-                    return render(request, "web_grade/manage_grade.html", {'message': "Table ต้องมีฟิลด์ std_id"})
-                for key in student_list[0]:
-                    if create_table_sql[-1] != "(":
-                        create_table_sql += ","
-                    create_table_sql += f"`{key.upper()}` varchar(255)"
-                    header.append(key)
-                # Create table
-                create_table_sql += ');'
-                try:
-                    with connection.cursor() as cursor:
-                        cursor.execute(create_table_sql)
-                except Exception as e:
-                    grade.delete()
-                    return render(request, "web_grade/manage_grade.html", {'message': f'Exel File Error : {e} or (Maybe table is already exist)'})
+                insert_data_sql = f"INSERT INTO {grade_table} VALUES ("
+                for key in header:
+                    if insert_data_sql[-1] != "(":
+                        insert_data_sql += ","
+                    if (key == 'grade' or key == 'GRADE'):
+                        insert_data_sql += "\'" + \
+                            str(student[key]).upper()+"\'"
+                    elif (key == 'std_id' or key == 'STD_ID'):
+                        if len(str(student[key])) != 10:
+                            raise Exception(
+                                "ฟิลด์ STD_ID ต้องมีเลขนักศึกษา 10 ตัว")
+                        else:
+                            insert_data_sql += "\'" + \
+                                str(student[key])+"\'"
+                    else:
+                        insert_data_sql += "\'" + \
+                            str(student[key])+"\'"
 
-                # Upload exel to table
-                try:
-                    for student in student_list:
-                        created_grade = grade
-                        # Get header for create table field
-                        insert_data_sql = f"INSERT INTO {grade_table} VALUES ("
-                        for key in header:
-                            if insert_data_sql[-1] != "(":
-                                insert_data_sql += ","
-                            if (key == 'grade' or key == 'GRADE'):
-                                insert_data_sql += "\'" + \
-                                    str(student[key]).upper()+"\'"
-                            elif (key == 'std_id' or key == 'STD_ID'):
-                                if len(str(student[key])) != 10:
-                                    raise Exception(
-                                        "ฟิลด์ STD_ID ต้องมีเลขนักศึกษา 10 ตัว")
-                                else:
-                                    insert_data_sql += "\'" + \
-                                        str(student[key])+"\'"
-                            else:
-                                insert_data_sql += "\'" + \
-                                    str(student[key])+"\'"
-
-                        insert_data_sql += ');'
-                        # Insert each row of student data
-                        with connection.cursor() as cursor:
-                            cursor.execute(insert_data_sql)
-                except Exception as e:
-                    with connection.cursor() as cursor:
-                        cursor.execute(
-                            f"DROP TABLE {created_grade.grade_table}")
-                        created_grade.delete()
-                    return render(request, "web_grade/manage_grade.html", {'message': f'Exel File Error E : {e}'})
-                return HttpResponseRedirect(reverse("web_grade:courese_list"))
-            # If upload file error
-            except Exception as e:
+                insert_data_sql += ');'
+                # Insert each row of student data
                 with connection.cursor() as cursor:
-                    cursor.execute(f"DROP TABLE {grade.grade_table}")
+                    cursor.execute(insert_data_sql)
+        except Exception as e:
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    f"DROP TABLE {grade.grade_table}")
                 grade.delete()
-                return render(request, "web_grade/manage_grade.html", {'message': f'Exel File Error : {e}'})
-        # Load data to manage_grade page
-        else:
-            return render(request, "web_grade/manage_grade.html")
-    # If cause Exception
-    except Exception as e:
-        return render(request, "web_grade/manage_grade.html", {'message': f'Error : {e}'})
+            return render(request, "web_grade/manage_grade.html", {'message': f'Exel File Error E : {e}'})
+        return HttpResponseRedirect(reverse("web_grade:courese_list"))
+
+    # Load data to manage_grade page
+    else:
+        return render(request, "web_grade/manage_grade.html")
 
 
 def delete_table_view(request, grade_table_id):
